@@ -31,6 +31,10 @@ component ram
 		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
 end component;
+constant mult	: std_logic_vector(3 downto 0) := "1000";
+constant div	: std_logic_vector(3 downto 0) := "1001";
+constant greater : std_logic_vector(3 downto 0) := "1010";
+constant smaller : std_logic_vector(3 downto 0) := "1011";
 
 component CPU is
 port (	
@@ -46,7 +50,8 @@ port (
 		D_rfout_bus: out std_logic_vector(15 downto 0);  
 		D_RFwa_s, D_RFr1a_s, D_RFr2a_s: out std_logic_vector(3 downto 0);
 		D_RFwe_s, D_RFr1e_s, D_RFr2e_s: out std_logic;
-		D_RFs_s, D_ALUs_s: out std_logic_vector(1 downto 0);
+		D_RFs_s: out std_logic_vector(1 downto 0);
+		D_ALUs_s: out std_logic_vector(2 downto 0);
 		D_PCld_s, D_jpz_s: out std_logic
 		-- end debug variables				
 );
@@ -57,7 +62,7 @@ port (
 		num_A: 	in std_logic_vector(15 downto 0);
 		num_B: 	in std_logic_vector(15 downto 0);
 		jpsign:	in std_logic;
-		ALUs:	in std_logic_vector(1 downto 0);
+		ALUs:	in std_logic_vector(2 downto 0);
 		ALUz:	out std_logic;
 		ALUout:	out std_logic_vector(15 downto 0)
 );
@@ -86,7 +91,7 @@ port(
 	RFwe_ctrl:	out std_logic;
 	RFr1e_ctrl:	out std_logic;
 	RFr2e_ctrl:	out std_logic;						 
-	ALUs_ctrl:	out std_logic_vector(1 downto 0);	 
+	ALUs_ctrl:	out std_logic_vector(2 downto 0);	 
 	jmpen_ctrl:	out std_logic;
 	PCinc_ctrl:	out std_logic;
 	PCclr_ctrl:	out std_logic;
@@ -181,7 +186,7 @@ port(
 	RFr1e_cu:	out	std_logic;
 	RFr2e_cu:	out	std_logic;
 	jpen_cu:	out 	std_logic;
-	ALUs_cu:	out	std_logic_vector(1 downto 0);	
+	ALUs_cu:	out	std_logic_vector(2 downto 0);	
 	Mre_cu:		out 	std_logic;
 	Mwe_cu:		out 	std_logic;
 	oe_cu:		out 	std_logic
@@ -202,7 +207,7 @@ port(
 	RFr1e_dp:	in 	std_logic;
 	RFr2e_dp:	in 	std_logic;
 	jp_en:		in 	std_logic;
-	ALUs_dp:	in 	std_logic_vector(1 downto 0);
+	ALUs_dp:	in 	std_logic_vector(2 downto 0);
 	ALUz_dp:	out 	std_logic;
 	RF1out_dp:	out 	std_logic_vector(15 downto 0);
 	ALUout_dp:	out 	std_logic_vector(15 downto 0)
