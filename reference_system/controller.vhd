@@ -43,8 +43,8 @@ architecture fsm of controller is
 			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b);
   signal state: state_type;
   signal delaystate: state_type;
-  constant memdelay: integer :=1;
-  signal usedelay: boolean := false;
+  constant memdelay: integer :=16;
+  signal usedelay: boolean := true;
   
 begin
   process(clock, rst, IR_word)
@@ -72,7 +72,7 @@ begin
 	  when Sdly =>								-- Delay State	
 			maccesdelay:=maccesdelay-1;
 			if maccesdelay=0 then state <= delaystate;
-			   else state <= Sdly ;
+			else state <= Sdly ;
 			end if;
 			
 	  when S1 =>	PCinc_ctrl <= '0';	
