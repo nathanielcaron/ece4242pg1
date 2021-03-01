@@ -61,7 +61,6 @@ begin
 		Mwe_ctrl <= '0';					
 		jmpen_ctrl <= '0';		
 		oe_ctrl <= '0';
-		usedelay <=false;
 		state <= S0;
     elsif (clock'event and clock='1') then
 	case state is 
