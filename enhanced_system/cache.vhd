@@ -19,9 +19,15 @@ port (
 		data_in_a		:	in std_logic_vector((DATA_WIDTH-1) downto 0);
 		data_in_b		:	in std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0);
 		we_a				:	in std_logic;
+<<<<<<< HEAD
 		we_b				:	out std_logic;
 		re_a				:	in std_logic;
 		re_b				:	out std_logic;
+=======
+		we_b				:	in std_logic;
+		re_a				:	in std_logic;
+		re_b				:	in std_logic;
+>>>>>>> master
 		data_out_a		:	out std_logic_vector((DATA_WIDTH-1) downto 0);
 		data_out_b		:	out std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0);
 		hit				: 	out std_logic
@@ -48,9 +54,12 @@ architecture behav of cache is
 	-- Create signals to trigger loads and write backs
 	signal load_block			: std_logic := '0';
 	signal write_back_block	:	std_logic := '0';
+<<<<<<< HEAD
 	--temp signal for the ram bus
 	signal block_to_RAM : std_logic_vector(31 downto 0);
 	signal delay : integer;
+=======
+>>>>>>> master
 begin
 
 	-- Break down address into bit structure (tag = 6 bits, line = 2 bits, word = 1 bit)
@@ -80,6 +89,7 @@ begin
 			else
 				-- MISS
 				-- Step 1: Check if dirty bit, if dirty then must write back block
+<<<<<<< HEAD
 				if cache_line_dirty_bits(line_int) = '1' then
 					write_back_block <= 1;
 				else
@@ -93,6 +103,12 @@ begin
 					-- MUST MARK BIT AS DIRTY
 					cache_line_dirty_bits(line_int) <= 1;
 				end if;
+=======
+				-- Step 2: Once bit is clean, must load the new word
+				-- Step 3: Poll until address_tag = cache_line_tags(line_int)
+				-- Step 4: Perform write to cache
+				-- MUST MARK BIT AS DIRTY
+>>>>>>> master
 			end if;
 		end if;
 	end process;
@@ -111,6 +127,7 @@ begin
 				end if;
 			else
 				-- MISS
+<<<<<<< HEAD
 				-- Step 1: Check if dirty bit, if dirty then must write back block
 				if cache_line_dirty_bits(line_int) = '1' then
 					write_back_block <= 1;
@@ -125,6 +142,13 @@ begin
 					-- MUST MARK BIT AS DIRTY
 					cache_line_dirty_bits(line_int) <= 1;
 				end if;
+=======
+				data_out_a <= "ZZZZZZZZ";
+				-- Step 1: Check if dirty bit, if dirty then must write back block
+				-- Step 2: Once bit is clean, must load the new word
+				-- Step 3: Poll until address_tag = cache_line_tags(line_int)
+				-- Step 4: Perform read from cache
+>>>>>>> master
 			end if;
 		end if;
 	end process;
@@ -135,6 +159,7 @@ begin
 		if (rising_edge(clock_b)) then
 			if (load_block = '1' and write_back_block = '0') then
 				-- load block from main memory
+<<<<<<< HEAD
 				re_b <= '1'
 				delay <=16;
 				if delay >= 1 then
@@ -144,6 +169,9 @@ begin
 					cache(line_int, 1) <= data_in_b(15 downto 0);
 					load_block = '0';
 				end if;
+=======
+				
+>>>>>>> master
 			end if;
 		end if;
 	end process;
@@ -154,6 +182,7 @@ begin
 		if (rising_edge(clock_b)) then
 			if (write_back_block = '1' and load_block = '0') then
 				-- write back block to main memory
+<<<<<<< HEAD
 				delay <=16;
 				if delay = 16 then
 					block_to_RAM(31 downto 16) <= cache(line_int, 0);
@@ -166,6 +195,9 @@ begin
 					write_back_block = '0'
 					load_block <= '1';
 				end if
+=======
+				
+>>>>>>> master
 			end if;
 		end if;
 	end process;
