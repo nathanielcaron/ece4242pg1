@@ -46,7 +46,7 @@ architecture rtl of SimpleCompArch is
     signal Mwe                  : std_logic;                    -- Mem. write enable     (CTRLER    -> Mem)
     signal Mre32                : std_logic;                    -- Mem. read enable      (CTRLER    -> Mem) 
     signal Mwe32                : std_logic;                    -- Mem. write enable     (CTRLER    -> Mem)
-    signal clock_b              : std_logic;
+    signal cache_ready          : std_logic;
 
     --System local variables
     signal oe                    : std_logic;    
@@ -61,7 +61,7 @@ Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe,
                                                                                     
 Unit2: ram32bus port map(mem_addr9, sys_clk, mdin_bus32, Mre32, Mwe32, mdout_bus32);
 Unit3: obuf port map(oe, mdout_bus, sys_output);
-Unit4: cache port map(sys_clk, clock_b, 
+Unit4: cache port map(sys_clk, cache_ready, 
                     mem_addr, mem_addr9,
                     mdin_bus, mdin_bus32,
                     Mwe, Mwe32,

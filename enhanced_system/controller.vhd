@@ -39,7 +39,7 @@ port(clock:       in std_logic;
     Mre32, Mwe32: out std_logic;
     mdout_bus32:  out std_logic_vector(31 downto 0);
     --cache
-    clock_b:      out std_logic                            --TODO: write logic for clock_b in this file
+    cache_ready:  in std_logic                            --TODO: write logic for cache_ready in this file
 );
 end;
 

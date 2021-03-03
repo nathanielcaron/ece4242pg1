@@ -15,7 +15,7 @@ generic (
 --"A" signals are CPU facing, "B" signals are RAM facing
 port (     
         clock_a          :     in std_logic;
-        clock_b          :     in std_logic;
+        cache_ready      :     out std_logic;
         addr_a           :     in std_logic_vector((ADDR_WIDTH-1) downto 0);
         addr_b           :     in std_logic_vector((RAM_ADDR_WIDTH-1) downto 0);
         data_in_a        :     in std_logic_vector((DATA_WIDTH-1) downto 0);

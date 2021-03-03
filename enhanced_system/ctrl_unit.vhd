@@ -39,7 +39,7 @@ port(clock_cu:    in     std_logic;
     Mre32, Mwe32: out    std_logic;
     mdout_bus32:  out    std_logic_vector(31 downto 0);
     --cache
-    clock_b:      out    std_logic
+    cache_ready:  in     std_logic
 );
 end;
 
@@ -61,7 +61,7 @@ begin
                 RFr2e_cu,ALUs_cu,jpen_cu,PCinc_sig,
                 PCclr_sig,IRld_sig,Ms_sig,Mre_cu,Mwe_cu,oe_cu,
                 mem_addr9, mdin_bus32, Mre32, Mwe32, mdout_bus32        --RAM
-                clock_b                                                 --cache
+                cache_ready                                             --cache
                 );
   U1: PC port map(clock_cu,PCld_cu, PCinc_sig, PCclr_sig, IR2mux_a, PC2mux);
   U2: IR port map(mdata_out, IRld_sig, IR2mux_a, IR_sig);

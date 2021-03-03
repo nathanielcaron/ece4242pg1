@@ -35,7 +35,7 @@ port( cpu_clk           : in std_logic;
         Mre32, Mwe32     : out std_logic;
         mdout_bus32      : out std_logic_vector(31 downto 0);
         --cache
-        clock_b          : out std_logic
+        cache_ready      : in std_logic
         );
 end;
 
@@ -59,7 +59,7 @@ begin
     Unit0: ctrl_unit port map(  cpu_clk,cpu_rst,PCld_s,mdout_bus,rfout_bus,addr_bus,immd_bus, RFs_s,
                                 RFwa_s,RFr1a_s,RFr2a_s,RFwe_s,RFr1e_s,RFr2e_s,jpz_s,ALUs_s,Mre_s,Mwe_s,oe_s
                                 mem_addr9, mdin_bus32, Mre32, Mwe32, mdout_bus32,        --RAM
-                                clock_b                                                  --cache
+                                cache_ready                                              --cache
                                 );
     Unit1: datapath port map( cpu_clk,cpu_rst,immd_bus,mdout_bus, RFs_s,RFwa_s,RFr1a_s,
                               RFr2a_s,RFwe_s,RFr1e_s,RFr2e_s,jpz_s,ALUs_s,PCld_s,rfout_bus, mdin_bus);
