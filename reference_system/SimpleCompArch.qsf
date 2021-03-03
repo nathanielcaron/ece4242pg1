@@ -42,7 +42,7 @@ set_global_assignment -name DEVICE EP4CE115F29C7
 set_global_assignment -name TOP_LEVEL_ENTITY SimpleCompArch
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 15.1.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "17:18:03  JANUARY 15, 2016"
-set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Standard Edition"
 set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
@@ -73,19 +73,22 @@ set_global_assignment -name EDA_USER_COMPILED_SIMULATION_LIBRARY_DIRECTORY .\\Si
 set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST ON -section_id eda_simulation
 set_global_assignment -name OPTIMIZATION_MODE BALANCED
 set_global_assignment -name FITTER_EFFORT "FAST FIT"
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
+set_global_assignment -name MIF_FILE mem_init.mif
+set_global_assignment -name SOURCE_FILE ram.cmp
+set_global_assignment -name QIP_FILE ram.qip
 set_global_assignment -name VHDL_FILE SimpleCompArch.vhd
 set_global_assignment -name VHDL_FILE reg_file.vhd
+set_global_assignment -name VHDL_FILE ram.vhd
 set_global_assignment -name VHDL_FILE PC.vhd
 set_global_assignment -name VHDL_FILE obuf.vhd
 set_global_assignment -name VHDL_FILE MP_lib.vhd
-set_global_assignment -name VHDL_FILE memory.vhd
 set_global_assignment -name VHDL_FILE IR.vhd
 set_global_assignment -name VHDL_FILE datapath.vhd
+set_global_assignment -name VHDL_FILE datamux.vhd
 set_global_assignment -name VHDL_FILE ctrl_unit.vhd
 set_global_assignment -name VHDL_FILE CPU.vhd
 set_global_assignment -name VHDL_FILE controller.vhd
 set_global_assignment -name VHDL_FILE alu.vhd
-set_global_assignment -name VECTOR_WAVEFORM_FILE SimSimpleCompArch.vwf
 set_global_assignment -name VHDL_FILE addrmux.vhd
-set_global_assignment -name VHDL_FILE datamux.vhd
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
