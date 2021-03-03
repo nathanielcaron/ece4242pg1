@@ -49,14 +49,13 @@ architecture rtl of SimpleCompArch is
     signal cache_ready          : std_logic;
 
     --System local variables
-    signal oe                    : std_logic;    
+    signal oe                   : std_logic;    
 begin
 
 Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe,
                     D_rfout_bus,D_RFwa, D_RFr1a, D_RFr2a,D_RFwe,            --Debug signals
                     D_RFr1e, D_RFr2e,D_RFs, D_ALUs,D_PCld, D_jpz,           --Debug signals
-                    mem_addr9, mdin_bus32, Mre32, Mwe32, mdout_bus32        --RAM
-                    clock_b                                                 --cache
+                    cache_ready                                             --cache
                     );
                                                                                     
 Unit2: ram32bus port map(mem_addr9, sys_clk, mdin_bus32, Mre32, Mwe32, mdout_bus32);
