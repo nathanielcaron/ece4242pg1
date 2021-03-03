@@ -5,9 +5,6 @@ use ieee.std_logic_arith.all;
 
 package MP_lib is
 
-type ram_type is array (0 to 255) of 
-                std_logic_vector(15 downto 0);
-
 constant ZERO : std_logic_vector(15 downto 0) := "0000000000000000";
 constant HIRES : std_logic_vector(15 downto 0) := "ZZZZZZZZZZZZZZZZ";
 constant mov1 : std_logic_vector(3 downto 0) := "0000";
@@ -19,6 +16,22 @@ constant subt : std_logic_vector(3 downto 0) := "0101";
 constant jz  : std_logic_vector(3 downto 0) := "0110";
 constant halt  : std_logic_vector(3 downto 0) := "1111";
 constant readm  : std_logic_vector(3 downto 0) := "0111";
+
+component cache is
+port(
+    clock_a          :     in std_logic;
+    cache_ready      :     out std_logic;
+    addr_a           :     in std_logic_vector((ADDR_WIDTH-1) downto 0);
+    addr_b           :     in std_logic_vector((RAM_ADDR_WIDTH-1) downto 0);
+    data_in_a        :     in std_logic_vector((DATA_WIDTH-1) downto 0);
+    data_in_b        :     in std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0);
+    we_a             :     in std_logic;
+    we_b             :     in std_logic;
+    re_a             :     in std_logic;
+    re_b             :     in std_logic;
+    data_out_a       :     out std_logic_vector((DATA_WIDTH-1) downto 0);
+    data_out_b       :     out std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0)
+);
 
 component CPU is
 port (    
@@ -35,8 +48,9 @@ port (
         D_RFwa_s, D_RFr1a_s, D_RFr2a_s: out std_logic_vector(3 downto 0);
         D_RFwe_s, D_RFr1e_s, D_RFr2e_s: out std_logic;
         D_RFs_s, D_ALUs_s: out std_logic_vector(1 downto 0);
-        D_PCld_s, D_jpz_s: out std_logic
-        -- end debug variables                
+        D_PCld_s, D_jpz_s: out std_logic;
+        -- end debug variables
+        cache_ready      : in std_logic     
 );
 end component;
 
@@ -82,7 +96,8 @@ port(
     Ms_ctrl:      out std_logic_vector(1 downto 0);
     Mre_ctrl:     out std_logic;
     Mwe_ctrl:     out std_logic;
-    oe_ctrl:      out std_logic
+    oe_ctrl:      out std_logic;
+    cache_ready:  in std_logic  
 );
 end component;
 
@@ -92,18 +107,6 @@ port(
     IRld:      in std_logic;
     dir_addr:  out std_logic_vector(15 downto 0);
     IRout:     out std_logic_vector(15 downto 0)
-);
-end component;
-
-component memory is
-port (     
-    clock      :    in std_logic;
-    rst        :    in std_logic;
-    Mre        :    in std_logic;
-    Mwe        :    in std_logic;
-    address    :    in std_logic_vector(7 downto 0);
-    data_in    :    in std_logic_vector(15 downto 0);
-    data_out   :    out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -172,7 +175,8 @@ port(
     ALUs_cu:       out     std_logic_vector(1 downto 0);    
     Mre_cu:        out     std_logic;
     Mwe_cu:        out     std_logic;
-    oe_cu:         out     std_logic
+    oe_cu:         out     std_logic;
+    cache_ready:   in std_logic  
 );
 end component;
 

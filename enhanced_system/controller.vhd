@@ -33,11 +33,6 @@ port(clock:       in std_logic;
     Mre_ctrl:     out std_logic;
     Mwe_ctrl:     out std_logic;
     oe_ctrl:      out std_logic;
-    --RAM:
-    mem_addr9:    out std_logic_vector(8 downto 0); 
-    mdin_bus32:   out std_logic_vector(31 downto 0);
-    Mre32, Mwe32: out std_logic;
-    mdout_bus32:  out std_logic_vector(31 downto 0);
     --cache
     cache_ready:  in std_logic                            --TODO: write logic for cache_ready in this file
 );

@@ -25,8 +25,7 @@ port (
         re_a             :     in std_logic;
         re_b             :     in std_logic;
         data_out_a       :     out std_logic_vector((DATA_WIDTH-1) downto 0);
-        data_out_b       :     out std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0);
-        hit              :     out std_logic
+        data_out_b       :     out std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0)
 );
 end;
 
@@ -50,6 +49,7 @@ architecture behav of cache is
     -- Create signals to trigger loads and write backs
     signal load_block            : std_logic := '0';
     signal write_back_block      : std_logic := '0';
+    signal hit                   : std_logic := '0';
 begin
 
     -- Break down address into bit structure (tag = 6 bits, line = 2 bits, word = 1 bit)
