@@ -17,21 +17,34 @@ constant jz  : std_logic_vector(3 downto 0) := "0110";
 constant halt  : std_logic_vector(3 downto 0) := "1111";
 constant readm  : std_logic_vector(3 downto 0) := "0111";
 
+component ram32bus
+    PORT
+    (
+        address        : IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+        clock        : IN STD_LOGIC  := '1';
+        data        : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        rden        : IN STD_LOGIC  := '1';
+        wren        : IN STD_LOGIC ;
+        q        : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+    );
+end component;
+
 component cache is
 port(
     clock_a          :     in std_logic;
     cache_ready      :     out std_logic;
-    addr_a           :     in std_logic_vector((ADDR_WIDTH-1) downto 0);
-    addr_b           :     in std_logic_vector((RAM_ADDR_WIDTH-1) downto 0);
-    data_in_a        :     in std_logic_vector((DATA_WIDTH-1) downto 0);
-    data_in_b        :     in std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0);
+    addr_a           :     in std_logic_vector(9 downto 0);
+    addr_b           :     in std_logic_vector(8 downto 0);
+    data_in_a        :     in std_logic_vector(15 downto 0);
+    data_in_b        :     in std_logic_vector(31 downto 0);
     we_a             :     in std_logic;
     we_b             :     in std_logic;
     re_a             :     in std_logic;
     re_b             :     in std_logic;
-    data_out_a       :     out std_logic_vector((DATA_WIDTH-1) downto 0);
-    data_out_b       :     out std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0)
+    data_out_a       :     out std_logic_vector(15 downto 0);
+    data_out_b       :     out std_logic_vector(31 downto 0)
 );
+end component;
 
 component CPU is
 port (    
