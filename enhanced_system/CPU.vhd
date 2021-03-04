@@ -26,8 +26,8 @@ port( cpu_clk           : in std_logic;
         D_rfout_bus                      : out std_logic_vector(15 downto 0);  
         D_RFwa_s, D_RFr1a_s, D_RFr2a_s   : out std_logic_vector(3 downto 0);
         D_RFwe_s, D_RFr1e_s, D_RFr2e_s   : out std_logic;
-        D_RFs_s                 			  : out std_logic_vector(1 downto 0);
-		  D_ALUs_s                         : out std_logic_vector(2 downto 0);
+        D_RFs_s                 			   : out std_logic_vector(1 downto 0);
+		    D_ALUs_s                         : out std_logic_vector(2 downto 0);
         D_PCld_s, D_jpz_s                : out std_logic;
         -- end debug variables        
         --cache

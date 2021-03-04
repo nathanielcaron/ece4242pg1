@@ -21,15 +21,29 @@ constant div	: std_logic_vector(3 downto 0) := "1001";
 constant greater : std_logic_vector(3 downto 0) := "1010";
 constant mov5 : std_logic_vector(3 downto 0) := "1011";
 
+component ram32bus
+    PORT
+    (
+        address        : IN STD_LOGIC_VECTOR (8 DOWNTO 0);
+        clock        : IN STD_LOGIC  := '1';
+        data        : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
+        rden        : IN STD_LOGIC  := '1';
+        wren        : IN STD_LOGIC ;
+        q        : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
+    );
+end component;
+
 component cache is
 port(
-	 rst              :     in std_logic;
-	 clock_a          :     in std_logic;
+
+	 rst               :     in std_logic;
+	 clock_a           :     in std_logic;
     addr_a           :     in std_logic_vector(9 downto 0);
     data_in_a        :     in std_logic_vector(15 downto 0);
     data_in_b        :     in std_logic_vector(31 downto 0);
     we_a             :     in std_logic;
     re_a             :     in std_logic;
+
 	 cache_ready      :     out std_logic := '1';
 	 addr_b           :     out std_logic_vector(8 downto 0);
 	 we_b             :     out std_logic;
