@@ -34,7 +34,7 @@ end component;
 constant mult	: std_logic_vector(3 downto 0) := "1000";
 constant div	: std_logic_vector(3 downto 0) := "1001";
 constant greater : std_logic_vector(3 downto 0) := "1010";
-constant smaller : std_logic_vector(3 downto 0) := "1011";
+constant mov5 : std_logic_vector(3 downto 0) := "1011";
 
 component CPU is
 port (	

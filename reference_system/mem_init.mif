@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 -- Copyright (C) 2018  Intel Corporation. All rights reserved.
 -- Your use of Intel Corporation's design tools, logic functions 
 -- and other software and tools, and its AMPP partner logic 
@@ -99,5 +100,157 @@ CONTENT BEGIN
 	22	:	703B;			-- output<- M[59]   mov obuf_out,M[59]			
 	23	:	F000;			-- halt
 	[24..1023]  :   0;
+END;
+>>>>>>> master
+=======
+-- Copyright (C) 2018  Intel Corporation. All rights reserved.
+-- Your use of Intel Corporation's design tools, logic functions 
+-- and other software and tools, and its AMPP partner logic 
+-- functions, and any output files from any of the foregoing 
+-- (including device programming or simulation files), and any 
+-- associated documentation or information are expressly subject 
+-- to the terms and conditions of the Intel Program License 
+-- Subscription Agreement, the Intel Quartus Prime License Agreement,
+-- the Intel FPGA IP License Agreement, or other applicable license
+-- agreement, including, without limitation, that your use is for
+-- the sole purpose of programming logic devices manufactured by
+-- Intel and sold by Intel or its authorized distributors.  Please
+-- refer to the applicable agreement for further details.
+
+-- Quartus Prime generated Memory Initialization File (.mif)
+
+WIDTH=16;
+DEPTH=1024;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+	0     :   3900;				-- R9 <- 0
+	1	  :	  3E96;				-- R14 <- 150
+	2	  :	  3D01;				-- R13 <- 1
+	3     :   B7E0;				-- R7 <- M[R14]
+	4	  :   4ED0;				-- R14 <- R14 + R13
+	5     :   B8E0;				-- R8 <- M[R14]
+	6	  :   4ED0;				-- R14 <- R14 + R13
+	7     :   185A;				-- M[90] <- R8
+	8     :   175B;				-- M[91] <- R7
+	9     :   015A;				-- R1 <- M[90]
+	10    :   005B;				-- R0 <- M[91]
+	11    :   9100;				-- R1 <- R1/R0
+	12    :   8100;				-- R1 <- R1*R0
+	13    :   035A;				-- R3 <- M[90]
+	14    :   5310;				-- R3 <- R3 - R1
+	15    :   6313;				-- R3=0 PC <- 19
+	16    :   105A;				-- M[90] <- R0
+	17    :   135B;				-- M[91] <- R3
+	18    :   6909;				-- R9=0 PC <- 09
+	19    :   705B;				-- output <- M[91]
+	20	  :   BCE0;				-- R12 <- M[R14]
+	21	  :	  6C17;				-- R12=0 PC <- 23
+	22	  :   6903;				-- R9=0 Pc <- 03
+	23    :   F000;				-- halt
+	[24..149]  :   0000;
+	150	  : 0003;			-- Pair 1
+	151	  :	0066;
+	152	  : 0023;			-- Pair 2
+	153   : 0076;
+	154	  :   0023;       -- Pair 3
+	155   :   0084;
+	156   :   0002;       -- Pair 4
+	157   :   0072;
+	158   :   002E;       -- Pair 5
+	159   :   0073;
+	160   :   0011;       -- Pair 6
+	161   :   007B;
+	162   :   001B;       -- Pair 7
+	163   :   0091;
+	164   :   002C;       -- Pair 8
+	165   :   007C;
+	166   :   0024;       -- Pair 9
+	167   :   007A;
+	168   :   000C;       -- Pair 10
+	169   :   0075;
+	170   :   002B;       -- Pair 11
+	171   :   0088;
+	172   :   0025;       -- Pair 12
+	173   :   007B;
+	174   :   0008;       -- Pair 13
+	175   :   006B;
+	176   :   0031;       -- Pair 14
+	177   :   0071;
+	178   :   0006;       -- Pair 15
+	179   :   0076;
+	180   :   002E;       -- Pair 16
+	181   :   006B;
+	182   :   002D;       -- Pair 17
+	183   :   0081;
+	184   :   001C;       -- Pair 18
+	185   :   006C;
+	186   :   0027;       -- Pair 19
+	187   :   006D;
+	188   :   0006;       -- Pair 20
+	189   :   0093;
+	190   :   0011;       -- Pair 21
+	191   :   006B;
+	192   :   0017;       -- Pair 22
+	193   :   0089;
+	194   :   000D;       -- Pair 23
+	195   :   0077;
+	196   :   0016;       -- Pair 24
+	197   :   0078;
+	198   :   000A;       -- Pair 25
+	199   :   007A;
+	200   :   002F;       -- Pair 26
+	201   :   006A;
+	202   :   0016;       -- Pair 27
+	203   :   007D;
+	204   :   000E;       -- Pair 28
+	205   :   008B;
+	206   :   002A;       -- Pair 29
+	207   :   0094;
+	208   :   0028;       -- Pair 30
+	209   :   0081;
+	210   :   000A;       -- Pair 31
+	211   :   0078;
+	212   :   0025;       -- Pair 32
+	213   :   0095;
+	214   :   0013;       -- Pair 33
+	215   :   006B;
+	216   :   0011;       -- Pair 34
+	217   :   006D;
+	218   :   002C;       -- Pair 35
+	219   :   007E;
+	220   :   002C;       -- Pair 36
+	221   :   0064;
+	222   :   002B;       -- Pair 37
+	223   :   008C;
+	224   :   0006;       -- Pair 38
+	225   :   0066;
+	226   :   0008;       -- Pair 39
+	227   :   0076;
+	228   :   0020;       -- Pair 40
+	229   :   0064;
+	230   :   002A;       -- Pair 41
+	231   :   0071;
+	232   :   0031;       -- Pair 42
+	233   :   006B;
+	234   :   0027;       -- Pair 43
+	235   :   0090;
+	236   :   002E;       -- Pair 44
+	237   :   007A;
+	238   :   001F;       -- Pair 45
+	239   :   006A;
+	240   :   002C;       -- Pair 46
+	241   :   006E;
+	242   :   002D;       -- Pair 47
+	243   :   007C;
+	244   :   001E;       -- Pair 48
+	245   :   0067;
+	246   :   0025;       -- Pair 49
+	247   :   007A;
+	248   :   000E;       -- Pair 50
+	249   :   006F;
+	[250..1023]  :   0000;
 END;
 >>>>>>> master
