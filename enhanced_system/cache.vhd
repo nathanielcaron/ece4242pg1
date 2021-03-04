@@ -11,21 +11,22 @@ generic (
 		DATA_WIDTH 			:	natural := 16;
 		ADDR_WIDTH			:	natural := 10
 );
-port (rst            :  in std_logic; 	
-		clock_a			: 	in std_logic;
-		clock_b			: 	in std_logic;
-		addr_a			: 	in std_logic_vector((ADDR_WIDTH-1) downto 0);
-		addr_b			: 	out std_logic_vector(8 downto 0);
-		data_in_a		:	in std_logic_vector((DATA_WIDTH-1) downto 0);
-		data_in_b		:	in std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0);
-		we_a				:	in std_logic;
-		we_b				:	out std_logic;
-		re_a				:	in std_logic;
-		re_b				:	out std_logic;
-		data_out_a		:	out std_logic_vector((DATA_WIDTH-1) downto 0);
-		data_out_b		:	out std_logic_vector((CACHE_RAM_BUS_WIDTH-1) downto 0);
-		hit				: 	out std_logic;
-		ready          :  out std_logic := '1'
+port (
+		rst              :     in std_logic;
+	   clock_a          :     in std_logic;
+      addr_a           :     in std_logic_vector(9 downto 0);
+      data_in_a        :     in std_logic_vector(15 downto 0);
+      data_in_b        :     in std_logic_vector(31 downto 0);
+      we_a             :     in std_logic;
+      re_a             :     in std_logic;
+	   cache_ready      :     out std_logic := '1';
+	   addr_b           :     out std_logic_vector(8 downto 0);
+      we_b             :     out std_logic;
+		re_b             :     out std_logic;
+      data_out_a       :     out std_logic_vector(15 downto 0);
+      data_out_b       :     out std_logic_vector(31 downto 0);
+	   hit				  : 	  out std_logic
+	 
 );
 end;
 
@@ -52,18 +53,21 @@ architecture behav of cache is
 	--temp signal for the ram bus
 	signal block_to_RAM : std_logic_vector(31 downto 0);
 	--set delays for writback and load (CHECK COUNT FOR DELAY ONCE DONE!!!!!)
-	signal WB_delay : integer := 11;
-	signal LD_delay : integer := 15;
+	signal WB_delay : integer := 12;
+	signal LD_delay : integer := 12;
 	
 	--setting up state for case structure
-	type state_type is (Init, Wr_miss, Wr_miss_writeback, Wr_miss_load, Wr_miss_writeback_a, writeback_delay, Wr_miss_load_a, load_delay);
+	type state_type is (Init, Wr_miss, Wr_miss_writeback, Wr_miss_writeback_a, writeback_delay, Wr_miss_load, Wr_miss_load_a, Wr_miss_load_b, load_delay, 
+	actually_writing, Rd_miss, Rd_miss_writeback, Rd_miss_writeback_a, writeback_delay_rd, Rd_miss_load, Rd_miss_load_a, Rd_miss_load_b, load_delay_rd,
+	actually_reading);
 	signal state: state_type;
 	signal delaystate: state_type;
 	signal current_State : state_type;
 	signal rdy_signal : std_logic;
+	signal hit_flag : std_logic;
 begin
 	process (clock_a, rst)
-	variable writbackdelay: integer;
+	variable writebackdelay: integer;
 	variable loaddelay: integer;
 	begin
 		if rst='1' then
@@ -91,13 +95,13 @@ begin
 
 					-- Determine whether there is a HIT or a MISS
 					if address_tag = cache_line_tags(line_int) then
-						hit <= '1';
+						hit_flag <= '1';
 					else 
-						hit <= '0';
+						hit_flag <= '0';
 					end if;
 					
 					if we_a = '1' and re_a = '0' then
-						if hit = '1' then
+						if hit_flag = '1' then
 							-- write to word at the correct line and word index
 							cache(line_int, word_int) <= data_in_a;
 							-- MUST MARK BIT AS DIRTY
@@ -108,7 +112,7 @@ begin
 							state <= Wr_miss;
 						end if;
 					elsif we_a = '0' and re_a = '1' then
-						if hit = '1' then
+						if hit_flag = '1' then
 							data_out_a <= cache(line_int, word_int);
 							state <= Init;
 						else
@@ -132,13 +136,13 @@ begin
 					state <= Wr_miss_writeback_a;
 					
 				When Wr_miss_writeback_a =>
-					we_b <= 1;
+					we_b <= '1';
 					writebackdelay := WB_delay; 
 					state <= writeback_delay;
 					
 				when writeback_delay =>
 					writebackdelay := writebackdelay-1;
-				   if writebackdelay = '0' then
+				   if writebackdelay = 0 then
 						state <= Wr_miss_load;
 					else
 						state <= writeback_delay;
@@ -154,14 +158,14 @@ begin
 					state <= Wr_miss_load_b;
 										
 				when Wr_miss_load_b =>
-					cache(line_int, 0) <= data_in_b(32 downto 16);
+					cache(line_int, 0) <= data_in_b(31 downto 16);
 					cache(line_int, 1) <= data_in_b(15 downto 0);
 					loaddelay := LD_delay;
 					state <= load_delay;
 				
 				when load_delay =>
 					loaddelay := loaddelay-1;
-					if loaddelay = '0' then
+					if loaddelay = 0 then
 						state <= actually_writing;
 					else
 						state <= load_delay;
@@ -175,14 +179,13 @@ begin
 					cache_line_dirty_bits(line_int) <= '1';
 					--go wait for next address
 					state <= Init;
-					rdy_signal <= 1;
+					rdy_signal <= '1';
 					
 			--reading states
 				when Rd_miss =>
 					rdy_signal <= '0';
 					if cache_line_dirty_bits(line_int) = '1' then
-						state <= Rd
-						_miss_writeback;
+						state <= Rd_miss_writeback;
 					else
 						state <= Rd_miss_load;
 					end if;
@@ -194,20 +197,20 @@ begin
 					state <= Rd_miss_writeback_a;
 					
 				When Rd_miss_writeback_a =>
-					we_b <= 1;
+					we_b <= '1';
 					writebackdelay := WB_delay; 
 					state <= writeback_delay_rd;
 					
 				when writeback_delay_rd =>
 					writebackdelay := writebackdelay-1;
-				   if writebackdelay = '0' then
+				   if writebackdelay = 0 then
 						state <= Wr_miss_load;
 					else
 						state <= writeback_delay_rd;
 					end if;
 					
 				when Rd_miss_load =>
-					we_b <= '0';
+				   we_b <= '0';
 					addr_b <= addr_a(9 downto 1);
 					state <= Rd_miss_load_a;
 					
@@ -216,14 +219,15 @@ begin
 					state <= Rd_miss_load_b;
 										
 				when Rd_miss_load_b =>
-					cache(line_int, 0) <= data_in_b(32 downto 16);
+				   cache_line_dirty_bits(line_int) <= '0';
+					cache(line_int, 0) <= data_in_b(31 downto 16);
 					cache(line_int, 1) <= data_in_b(15 downto 0);
 					loaddelay := LD_delay;
 					state <= load_delay_rd;
 				
 				when load_delay_rd =>
 					loaddelay := loaddelay-1;
-					if loaddelay = '0' then
+					if loaddelay = 0 then
 						state <= actually_writing;
 					else
 						state <= load_delay_rd;
@@ -233,10 +237,11 @@ begin
 					re_b <= '0';
 					data_out_a <= cache(line_int, word_int);
 					state <= Init;
-					rdy_signal <= 1;	
+					rdy_signal <= '1';	
 												
 			end case;	
 		end if;
-		ready <= rdy_signal;
+		cache_ready <= rdy_signal;
+		hit <= hit_flag;
 	end process;
 end behav;
