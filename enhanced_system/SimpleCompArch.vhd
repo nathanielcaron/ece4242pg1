@@ -47,26 +47,26 @@ architecture rtl of SimpleCompArch is
     signal Mre32                : std_logic;                    -- Mem. read enable      (CTRLER    -> Mem) 
     signal Mwe32                : std_logic;                    -- Mem. write enable     (CTRLER    -> Mem)
     signal cache_ready          : std_logic;
+	 signal cache_hit            : std_logic;     
 
     --System local variables
     signal oe                   : std_logic;    
 begin
 
-Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe,
-                    D_rfout_bus,D_RFwa, D_RFr1a, D_RFr2a,D_RFwe,            --Debug signals
-                    D_RFr1e, D_RFr2e,D_RFs, D_ALUs,D_PCld, D_jpz,           --Debug signals
-                    cache_ready                                             --cache
-                    );
+Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe, 
+                    D_rfout_bus,D_RFwa,D_RFr1a,D_RFr2a,D_RFwe,            --Debug signals
+                    D_RFr1e,
+						  D_RFr2e,
+						  D_RFs,
+						  D_ALUs,
+						  D_PCld,
+						  D_jpz,           --Debug signals
+                    cache_ready);                                          --cache
+                    
                                                                                     
 Unit2: ram32bus port map(mem_addr9, sys_clk, mdin_bus32, Mre32, Mwe32, mdout_bus32);
 Unit3: obuf port map(oe, mdout_bus, sys_output);
-Unit4: cache port map(sys_clk, cache_ready, 
-                    mem_addr, mem_addr9,
-                    mdin_bus, mdin_bus32,
-                    Mwe, Mwe32,
-                    Mre, Mre32,
-                    mdout_bus, mdout_bus32
-                    );
+Unit4: cache port map(sys_rst, sys_clk,mem_addr, mdin_bus, mdin_bus32, Mwe, Mre, cache_ready, mem_addr9, Mwe32, Mre32, mdout_bus, mdout_bus32, cache_hit);
 
 -- Debug signals: output to upper level for simulation purpose only
     D_mdout_bus <= mdout_bus;    
