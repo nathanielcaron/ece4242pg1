@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 -- megafunction wizard: %RAM: 1-PORT%
 -- GENERATION: STANDARD
 -- VERSION: WM1.0
@@ -161,7 +161,7 @@ END SYN;
 -- Retrieval info: GEN_FILE: TYPE_NORMAL ram32bus.bsf FALSE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL ram32bus_inst.vhd FALSE
 -- Retrieval info: LIB_FILE: altera_mf
-=======
+-- =======
 -- megafunction wizard: %RAM: 1-PORT%
 -- GENERATION: STANDARD
 -- VERSION: WM1.0
@@ -324,4 +324,4 @@ END SYN;
 -- Retrieval info: GEN_FILE: TYPE_NORMAL ram32bus.bsf FALSE
 -- Retrieval info: GEN_FILE: TYPE_NORMAL ram32bus_inst.vhd FALSE
 -- Retrieval info: LIB_FILE: altera_mf
->>>>>>> master
+
