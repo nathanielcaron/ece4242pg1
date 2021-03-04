@@ -21,18 +21,6 @@ constant div	: std_logic_vector(3 downto 0) := "1001";
 constant greater : std_logic_vector(3 downto 0) := "1010";
 constant mov5 : std_logic_vector(3 downto 0) := "1011";
 
-component ram32bus
-    PORT
-    (
-        address        : IN STD_LOGIC_VECTOR (8 DOWNTO 0);
-        clock        : IN STD_LOGIC  := '1';
-        data        : IN STD_LOGIC_VECTOR (31 DOWNTO 0);
-        rden        : IN STD_LOGIC  := '1';
-        wren        : IN STD_LOGIC ;
-        q        : OUT STD_LOGIC_VECTOR (31 DOWNTO 0)
-    );
-end component;
-
 component cache is
 port(
 
