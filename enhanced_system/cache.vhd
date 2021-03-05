@@ -17,7 +17,7 @@ port (
 	   clock_a          :     in std_logic;
       addr_a           :     in std_logic_vector(9 downto 0);
       data_in_a        :     in std_logic_vector(15 downto 0);
-      data_in_b        :     out std_logic_vector(31 downto 0);
+      ram_input        :     out std_logic_vector(31 downto 0);
       we_a             :     in std_logic;
       re_a             :     in std_logic;
 	   cache_ready      :     out std_logic := '1';
@@ -25,7 +25,7 @@ port (
       we_b             :     out std_logic;
 		re_b             :     out std_logic;
       data_out_a       :     out std_logic_vector(15 downto 0);
-      data_out_b       :     in std_logic_vector(31 downto 0);
+      ram_output       :     in std_logic_vector(31 downto 0);
 	   hit				  : 	  out std_logic
 	 
 );
@@ -85,8 +85,8 @@ begin
 					state <= startup_a;
 
 				when startup_a =>
-					cache(init_count, 0) <= data_out_b(15 downto 0);
-					cache(init_count, 1) <= data_out_b(31 downto 16);
+					cache(init_count, 0) <= ram_output(15 downto 0);
+					cache(init_count, 1) <= ram_output(31 downto 16);
 					if init_count = 3 then
 						state <= Init;
 						init_count <= 0;
@@ -95,7 +95,7 @@ begin
 						state <= startup;
 						init_count <= init_count + 1;
 					end if;
-					
+
 				--intitilizing state
 				when Init =>
 					-- set ready flag to one
@@ -159,8 +159,8 @@ begin
 					end if;
 					
 				When Wr_miss_writeback =>
-					data_in_b(31 downto 16) <= cache(line_int, 1);
-					data_in_b(15 downto 0) <= cache(line_int, 0);
+					ram_input(31 downto 16) <= cache(line_int, 1);
+					ram_input(15 downto 0) <= cache(line_int, 0);
 					addr_b(8 downto 2) <= cache_line_tags(line_int);
 					addr_b(1 downto 0) <= address_line;
 					state <= Wr_miss_writeback_a;
@@ -188,8 +188,8 @@ begin
 					state <= Wr_miss_load_b;
 										
 				when Wr_miss_load_b =>
-					cache(line_int, 0) <= data_out_b(15 downto 0);
-					cache(line_int, 1) <= data_out_b(31 downto 16);
+					cache(line_int, 0) <= ram_output(15 downto 0);
+					cache(line_int, 1) <= ram_output(31 downto 16);
 					loaddelay := LD_delay;
 					state <= load_delay;
 				
@@ -220,8 +220,8 @@ begin
 					end if;
 					
 				When Rd_miss_writeback =>
-					data_in_b(31 downto 16) <= cache(line_int, 1);
-					data_in_b(15 downto 0) <= cache(line_int, 0);
+					ram_input(31 downto 16) <= cache(line_int, 1);
+					ram_input(15 downto 0) <= cache(line_int, 0);
 					addr_b(8 downto 2) <= cache_line_tags(line_int);
 					addr_b(1 downto 0) <= address_line;
 					state <= Rd_miss_writeback_a;
@@ -250,8 +250,8 @@ begin
 										
 				when Rd_miss_load_b =>
 				   cache_line_dirty_bits(line_int) <= '0';
-					cache(line_int, 0) <= data_out_b(15 downto 0);
-					cache(line_int, 1) <= data_out_b(31 downto 16);
+					cache(line_int, 0) <= ram_output(15 downto 0);
+					cache(line_int, 1) <= ram_output(31 downto 16);
 					loaddelay := LD_delay;
 					state <= load_delay_rd;
 				

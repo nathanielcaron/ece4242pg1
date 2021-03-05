@@ -28,7 +28,7 @@ port(
 	 clock_a           :     in std_logic;
     addr_a           :     in std_logic_vector(9 downto 0);
     data_in_a        :     in std_logic_vector(15 downto 0);
-    data_in_b        :     out std_logic_vector(31 downto 0);
+    ram_input        :     out std_logic_vector(31 downto 0);
     we_a             :     in std_logic;
     re_a             :     in std_logic;
 
@@ -37,7 +37,7 @@ port(
 	 we_b             :     out std_logic;
     re_b             :     out std_logic;
 	 data_out_a       :     out std_logic_vector(15 downto 0);
-    data_out_b       :     in std_logic_vector(31 downto 0);
+    ram_output       :     in std_logic_vector(31 downto 0);
 	 hit              :     out std_logic
 );
 end component;
