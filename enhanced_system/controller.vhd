@@ -45,13 +45,13 @@ architecture fsm of controller is
 			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d);
   signal state: state_type;
   signal delaystate: state_type;
-  constant memdelay: integer :=16;
-  signal usedelay: boolean := true;
+--  constant memdelay: integer :=16;
+--  signal usedelay: boolean := true;
   
 begin
   process(clock, rst, IR_word)
     variable OPCODE: std_logic_vector(3 downto 0);
-	 variable maccesdelay: integer;
+--	 variable maccesdelay: integer;
 	 begin
     if rst='1' then			   
 		Ms_ctrl <= "10";
@@ -70,9 +70,8 @@ begin
 	  when S0 =>	PCclr_ctrl <= '0';	-- Reset State	
 			state <= S1;	
 
-	  when Sdly =>								-- Delay State	
-			maccesdelay:=maccesdelay-1;
-			if maccesdelay=0 then state <= delaystate;
+	  when Sdly =>								-- Wait for cache	
+			if cache_ready = '1' then state <= delaystate;
 			else state <= Sdly ;
 			end if;
 			
@@ -87,9 +86,8 @@ begin
 			jmpen_ctrl <= '0';
 			oe_ctrl <= '0';
 			state <= S1a;
-			if usedelay = false then state <= S1a;
+			if cache_ready = '1' then state <= S1a;
 			else 
-				maccesdelay:=memdelay;
 				delaystate<= S1a;
 				state <= Sdly;
 			end if;
@@ -126,9 +124,8 @@ begin
 			Ms_ctrl <= "01";
 			Mre_ctrl <= '1';
 			Mwe_ctrl <= '0';		  
-			if usedelay = false then state <= S3a;
+			if cache_ready = '1' then state <= S3a;
 			else 
-				maccesdelay:=memdelay;
 				delaystate<= S3a;
 				state <= Sdly;
 			end if;
@@ -146,9 +143,8 @@ begin
 			state <= S4a;			-- read value from RF
 	  when S4a =>   Mre_ctrl <= '0';
 			Mwe_ctrl <= '1';		-- write into memory				
-			if usedelay = false then state <= S4b;
-			else 
-				maccesdelay:=memdelay;
+			if cache_ready = '1' then state <= S4b;
+			else
 				delaystate<= S4b;
 				state <= Sdly;
 			end if;			
@@ -165,9 +161,8 @@ begin
 			state <= S5a;
 	  when S5a =>   Mre_ctrl <= '0';			
 			Mwe_ctrl <= '1'; -- write into memory
-			if usedelay = false then state <= S5b;
-			else 
-				maccesdelay:=memdelay;
+			if cache_ready = '1' then state <= S5b;
+			else
 				delaystate<= S5b;
 				state <= Sdly;
 			end if;			
@@ -224,9 +219,8 @@ begin
 	  when S11 =>   Ms_ctrl <= "01";
 			Mre_ctrl <= '1'; -- read memory
 			Mwe_ctrl <= '0';		  
-			if usedelay = false then state <= S11a;
-			else 
-				maccesdelay:=memdelay;
+			if cache_ready = '1' then state <= S11a;
+			else
 				delaystate<= S11a;
 				state <= Sdly;
 			end if;			
@@ -285,9 +279,8 @@ begin
 		when s15a =>
 			Mre_ctrl <= '1';
 			Mwe_ctrl <= '0';
-			if usedelay = false then state <= S15b;
+			if cache_ready = '1' then state <= S15b;
 			else 
-				maccesdelay:=memdelay;
 				delaystate<= S15b;
 				state <= Sdly;
 			end if;
