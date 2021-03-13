@@ -75,6 +75,7 @@ begin
 	begin
 		if rst='1' then
 			state <= startup;
+			rdy_signal <= '0';
 			
 		elsif rising_edge(clock_a) then
 			case state is
@@ -116,7 +117,7 @@ begin
 						line_int <= to_integer(unsigned(address_line));
 
 						-- Determine whether there is a HIT or a MISS
-						if address_tag = cache_line_tags(line_int) then  --do we have to wait a cycle for line_int to settle?
+						if address_tag = cache_line_tags(to_integer(unsigned(address_line))) then  --do we have to wait a cycle for line_int to settle?
 							hit_flag <= '1';
 						else 
 							hit_flag <= '0';
