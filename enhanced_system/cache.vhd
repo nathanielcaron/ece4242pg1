@@ -116,7 +116,7 @@ begin
 						line_int <= to_integer(unsigned(address_line));
 
 						-- Determine whether there is a HIT or a MISS
-						if address_tag = cache_line_tags(line_int) then
+						if address_tag = cache_line_tags(line_int) then  --do we have to wait a cycle for line_int to settle?
 							hit_flag <= '1';
 						else 
 							hit_flag <= '0';
@@ -150,14 +150,14 @@ begin
 							rdy_signal <= '0';
 						end if;
 					end if;
-			--Writing states						
-				when Wr_miss =>
-					if cache_line_dirty_bits(line_int) = '1' then
+			--Writing states
+				when Wr_miss => 
+					if cache_line_dirty_bits(line_int) = '1' then --could check in previous state if line_int is safe
 						state <= Wr_miss_writeback;
 					else
 						state <= Wr_miss_load;
 					end if;
-					
+
 				When Wr_miss_writeback =>
 					ram_input(31 downto 16) <= cache(line_int, 1);
 					ram_input(15 downto 0) <= cache(line_int, 0);
@@ -166,7 +166,7 @@ begin
 					state <= Wr_miss_writeback_a;
 					
 				When Wr_miss_writeback_a =>
-					we_b <= '1';
+					we_b <= '1'; 
 					writebackdelay := WB_delay;
 					state <= writeback_delay;
 					
@@ -212,8 +212,8 @@ begin
 					rdy_signal <= '1';
 					
 			--reading states
-				when Rd_miss =>
-					if cache_line_dirty_bits(line_int) = '1' then
+				when Rd_miss => 
+					if cache_line_dirty_bits(line_int) = '1' then --could check in previous state if line_int is safe
 						state <= Rd_miss_writeback;
 					else
 						state <= Rd_miss_load;
@@ -245,7 +245,7 @@ begin
 					state <= Rd_miss_load_a;
 					
 				when Rd_miss_load_a =>
-					re_b <= '1';
+					re_b <= '1'; --could happen 1 cycle earlier
 					state <= Rd_miss_load_b;
 										
 				when Rd_miss_load_b =>
