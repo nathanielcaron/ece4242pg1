@@ -113,13 +113,13 @@ begin
 			    end case;
 					
 	  when S3 =>	RFwa_ctrl <= IR_word(11 downto 8);
-	      if cache_ready = '1' then
-				RFs_ctrl <= "01";  -- RF[rn] <= mem[direct]
-				Ms_ctrl <= "01";
-				Mre_ctrl <= '1';
-				Mwe_ctrl <= '0';		 
-            state <= S3a;
-			end if;
+	    if cache_ready = '1' then
+			RFs_ctrl <= "01";  -- RF[rn] <= mem[direct]
+			Ms_ctrl <= "01";
+			Mre_ctrl <= '1';
+			Mwe_ctrl <= '0';		 
+			state <= S3a;
+		end if;
 			
 	  when S3a => RFwe_ctrl <= '1'; 
 	      Mre_ctrl <= '0'; 
