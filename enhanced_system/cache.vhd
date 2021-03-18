@@ -63,9 +63,9 @@ architecture behav of cache is
 	--temp signal for the ram bus
 	--signal block_to_RAM : std_logic_vector(31 downto 0);
 	--set delays for writback and load (CHECK COUNT FOR DELAY ONCE DONE!!!!!)
-	signal WB_delay : integer range 0 to 12 := 12;
-	signal LD_delay : integer range 0 to 12 := 12;
-	signal LD_delay_startup : integer range 0 to 15 := 15; --not 16 b/c startup_a takes a cycle
+	signal WB_delay : integer range 0 to 15 := 14;
+	signal LD_delay : integer range 0 to 15 := 14;
+	signal LD_delay_startup : integer range 0 to 15 := 14; --not 15 b/c startup_a takes a cycle
 	
 	--setting up state for case structure
 	type state_type is (Init, Wr_miss, Wr_miss_writeback, Wr_miss_writeback_a, writeback_delay, Wr_miss_load, Wr_miss_load_a, Wr_miss_load_b, load_delay, 
@@ -79,8 +79,8 @@ architecture behav of cache is
 	signal init_count : integer range 0 to 3 := 0;
 begin
 	process (clock_a, rst)
-	variable writebackdelay: integer range 0 to 12;
-	variable loaddelay: integer range 0 to 12;
+	variable writebackdelay: integer range 0 to 15;
+	variable loaddelay: integer range 0 to 15;
 
 	begin
 		--debug
@@ -139,7 +139,6 @@ begin
 					state <= startup_delay;
 					
 				when startup_delay =>
-					loaddelay := loaddelay-1;
 					if loaddelay = 0 then
 						state <= startup_b;
 						loaddelay := LD_delay_startup;
@@ -147,6 +146,7 @@ begin
 						cache(init_count, 1) <= ram_output(31 downto 16);
 					else
 						state <= startup_delay;
+						loaddelay := loaddelay-1;
 					end if;
 					
 				when startup_b =>
@@ -208,19 +208,16 @@ begin
 					state <= writeback_delay;
 					
 				when writeback_delay =>
-					writebackdelay := writebackdelay-1;
 				   if writebackdelay = 0 then
 						state <= Wr_miss_load;
 						we_b <= '0';
 					else
 						state <= writeback_delay;
+						writebackdelay := writebackdelay-1;
 					end if;
 					
 				when Wr_miss_load =>
 					addr_b <= addr_a(9 downto 1);
-					state <= Wr_miss_load_a;
-					
-				when Wr_miss_load_a =>
 					re_b <= '1';
 					state <= Wr_miss_load_b;
 										
@@ -231,11 +228,11 @@ begin
 					state <= load_delay;
 				
 				when load_delay =>
-					loaddelay := loaddelay-1;
 					if loaddelay = 0 then
 						state <= actually_writing;
 					else
 						state <= load_delay;
+						loaddelay := loaddelay-1;
 					end if;
 				
 				when actually_writing =>
@@ -269,20 +266,17 @@ begin
 					state <= writeback_delay_rd;
 					
 				when writeback_delay_rd =>
-					writebackdelay := writebackdelay-1;
 				   if writebackdelay = 0 then
 						state <= Rd_miss_load;
 						we_b <= '0';
 					else
 						state <= writeback_delay_rd;
+						writebackdelay := writebackdelay-1;
 					end if;
 					
 				when Rd_miss_load =>
 					addr_b <= addr_a(9 downto 1);
-					state <= Rd_miss_load_a;
-					
-				when Rd_miss_load_a =>
-					re_b <= '1'; --could happen 1 cycle earlier
+					re_b <= '1';
 					state <= Rd_miss_load_b;
 										
 				when Rd_miss_load_b =>
@@ -293,11 +287,11 @@ begin
 					state <= load_delay_rd;
 				
 				when load_delay_rd =>
-					loaddelay := loaddelay-1;
 					if loaddelay = 0 then
 						state <= actually_reading;
 					else
 						state <= load_delay_rd;
+						loaddelay := loaddelay-1;
 					end if;
 				
 				when actually_reading =>
