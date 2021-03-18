@@ -26,7 +26,16 @@ port (
 		re_b             :     out std_logic;
       data_out_a       :     out std_logic_vector(15 downto 0);
       ram_output       :     in std_logic_vector(31 downto 0);
-	   hit				  : 	  out std_logic
+	   hit				  : 	  out std_logic;
+		cachew0_db       :     out std_logic_vector(15 downto 0);
+		cachew1_db       :     out std_logic_vector(15 downto 0);
+		cachew2_db       :     out std_logic_vector(15 downto 0);
+		cachew3_db       :     out std_logic_vector(15 downto 0);
+		cachew4_db       :     out std_logic_vector(15 downto 0);
+		cachew5_db       :     out std_logic_vector(15 downto 0);
+		cachew6_db       :     out std_logic_vector(15 downto 0);
+		cachew7_db       :     out std_logic_vector(15 downto 0);
+		init_count_db : out std_logic_vector(1 downto 0)
 	 
 );
 end;
@@ -56,11 +65,12 @@ architecture behav of cache is
 	--set delays for writback and load (CHECK COUNT FOR DELAY ONCE DONE!!!!!)
 	signal WB_delay : integer range 0 to 12 := 12;
 	signal LD_delay : integer range 0 to 12 := 12;
+	signal LD_delay_startup : integer range 0 to 15 := 15; --not 16 b/c startup_a takes a cycle
 	
 	--setting up state for case structure
 	type state_type is (Init, Wr_miss, Wr_miss_writeback, Wr_miss_writeback_a, writeback_delay, Wr_miss_load, Wr_miss_load_a, Wr_miss_load_b, load_delay, 
 	actually_writing, Rd_miss, Rd_miss_writeback, Rd_miss_writeback_a, writeback_delay_rd, Rd_miss_load, Rd_miss_load_a, Rd_miss_load_b, load_delay_rd,
-	actually_reading, startup, startup_a);
+	actually_reading, startup, startup_a, startup_b, startup_delay);
 	signal state: state_type;
 	signal delaystate: state_type;
 	signal current_State : state_type;
@@ -73,8 +83,48 @@ begin
 	variable loaddelay: integer range 0 to 12;
 
 	begin
+		--debug
+		cachew0_db <= cache(0,0);
+		cachew1_db <= cache(0,1);
+		cachew2_db <= cache(1,0);
+		cachew3_db <= cache(1,1);
+		cachew4_db <= cache(2,0);
+		cachew5_db <= cache(2,1);
+		cachew6_db <= cache(3,0);
+		cachew7_db <= cache(3,1);
+		init_count_db <= std_logic_vector(to_unsigned(init_count, 2));
+		
+		if we_a = '1' xor re_a = '1' then
+			-- Break down address into bit structure (tag = 6 bits, line = 2 bits, word = 1 bit)
+			address_tag <= addr_a(9 downto 3);
+			address_line <= addr_a(2 downto 1);
+			address_word <= addr_a(0);
+			-- Convert line and word to integers to index into cache array
+			if address_word = '1' then
+				word_int <= 1;
+			else
+				word_int <= 0;
+			end if;
+			
+			line_int <= to_integer(unsigned(address_line));
+
+			-- Determine whether there is a HIT or a MISS
+			if address_tag = cache_line_tags(line_int) then
+				hit_flag <= '1';
+			else 
+				hit_flag <= '0';
+			end if;
+		else
+			hit_flag <= 'Z';
+--			address_tag <= "ZZZZZZZ";
+--			address_line <= "ZZ";
+--			address_word <= 'Z';
+		end if;
 		if rst='1' then
 			state <= startup;
+			rdy_signal <= '0';
+			we_b <= '0';
+			re_b <= '0';
 			
 		elsif rising_edge(clock_a) then
 			case state is
@@ -85,8 +135,21 @@ begin
 					state <= startup_a;
 
 				when startup_a =>
-					cache(init_count, 0) <= ram_output(15 downto 0);
-					cache(init_count, 1) <= ram_output(31 downto 16);
+					loaddelay := LD_delay_startup;
+					state <= startup_delay;
+					
+				when startup_delay =>
+					loaddelay := loaddelay-1;
+					if loaddelay = 0 then
+						state <= startup_b;
+						loaddelay := LD_delay_startup;
+						cache(init_count, 0) <= ram_output(15 downto 0);
+						cache(init_count, 1) <= ram_output(31 downto 16);
+					else
+						state <= startup_delay;
+					end if;
+					
+				when startup_b =>
 					if init_count = 3 then
 						state <= Init;
 						init_count <= 0;
@@ -101,32 +164,6 @@ begin
 					-- set ready flag to one
 					rdy_signal <= '1';
 				
-					if we_a = '1' xor re_a = '1' then
-						-- Break down address into bit structure (tag = 6 bits, line = 2 bits, word = 1 bit)
-						address_tag <= addr_a(9 downto 3);
-						address_line <= addr_a(2 downto 1);
-						address_word <= addr_a(0);
-						-- Convert line and word to integers to index into cache array
-						if address_word = '1' then
-							word_int <= 1;
-						else
-							word_int <= 0;
-						end if;
-						
-						line_int <= to_integer(unsigned(address_line));
-
-						-- Determine whether there is a HIT or a MISS
-						if address_tag = cache_line_tags(line_int) then
-							hit_flag <= '1';
-						else 
-							hit_flag <= '0';
-						end if;
-					else
-						hit_flag <= 'Z';
-						address_tag <= "ZZZZZZZ";
-						address_line <= "ZZ";
-						address_word <= 'Z';
-					end if;
 					
 					if we_a = '1' and re_a = '0' then
 						if hit_flag = '1' then
@@ -150,14 +187,14 @@ begin
 							rdy_signal <= '0';
 						end if;
 					end if;
-			--Writing states						
-				when Wr_miss =>
-					if cache_line_dirty_bits(line_int) = '1' then
+			--Writing states
+				when Wr_miss => 
+					if cache_line_dirty_bits(line_int) = '1' then --could check in previous state if line_int is safe
 						state <= Wr_miss_writeback;
 					else
 						state <= Wr_miss_load;
 					end if;
-					
+
 				When Wr_miss_writeback =>
 					ram_input(31 downto 16) <= cache(line_int, 1);
 					ram_input(15 downto 0) <= cache(line_int, 0);
@@ -166,7 +203,7 @@ begin
 					state <= Wr_miss_writeback_a;
 					
 				When Wr_miss_writeback_a =>
-					we_b <= '1';
+					we_b <= '1'; 
 					writebackdelay := WB_delay;
 					state <= writeback_delay;
 					
@@ -212,8 +249,8 @@ begin
 					rdy_signal <= '1';
 					
 			--reading states
-				when Rd_miss =>
-					if cache_line_dirty_bits(line_int) = '1' then
+				when Rd_miss => 
+					if cache_line_dirty_bits(line_int) = '1' then --could check in previous state if line_int is safe
 						state <= Rd_miss_writeback;
 					else
 						state <= Rd_miss_load;
@@ -245,7 +282,7 @@ begin
 					state <= Rd_miss_load_a;
 					
 				when Rd_miss_load_a =>
-					re_b <= '1';
+					re_b <= '1'; --could happen 1 cycle earlier
 					state <= Rd_miss_load_b;
 										
 				when Rd_miss_load_b =>

@@ -38,7 +38,16 @@ port(
     re_b             :     out std_logic;
 	 data_out_a       :     out std_logic_vector(15 downto 0);
     ram_output       :     in std_logic_vector(31 downto 0);
-	 hit              :     out std_logic
+	 hit              :     out std_logic;
+	 cachew0_db       :     out std_logic_vector(15 downto 0);
+	 cachew1_db       :     out std_logic_vector(15 downto 0);
+	 cachew2_db       :     out std_logic_vector(15 downto 0);
+	 cachew3_db       :     out std_logic_vector(15 downto 0);
+	 cachew4_db       :     out std_logic_vector(15 downto 0);
+	 cachew5_db       :     out std_logic_vector(15 downto 0);
+	 cachew6_db       :     out std_logic_vector(15 downto 0);
+	 cachew7_db       :     out std_logic_vector(15 downto 0);
+	 init_count_db : out std_logic_vector(1 downto 0)
 );
 end component;
 
