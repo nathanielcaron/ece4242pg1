@@ -68,8 +68,8 @@ architecture behav of cache is
 	signal LD_delay_startup : integer range 0 to 15 := 14; --not 15 b/c startup_a takes a cycle
 	
 	--setting up state for case structure
-	type state_type is (Init, Wr_miss, Wr_miss_writeback, Wr_miss_writeback_a, writeback_delay, Wr_miss_load, Wr_miss_load_a, Wr_miss_load_b, load_delay, 
-	actually_writing, Rd_miss, Rd_miss_writeback, Rd_miss_writeback_a, writeback_delay_rd, Rd_miss_load, Rd_miss_load_a, Rd_miss_load_b, load_delay_rd,
+	type state_type is (Init, Wr_miss, Wr_miss_writeback, Wr_miss_writeback_a, writeback_delay, Wr_miss_load, Wr_miss_load_a, load_delay, 
+	actually_writing, Rd_miss, Rd_miss_writeback, Rd_miss_writeback_a, writeback_delay_rd, Rd_miss_load, Rd_miss_load_a, load_delay_rd,
 	actually_reading, startup, startup_a, startup_b, startup_delay);
 	signal state: state_type;
 	signal delaystate: state_type;
@@ -219,9 +219,9 @@ begin
 				when Wr_miss_load =>
 					addr_b <= addr_a(9 downto 1);
 					re_b <= '1';
-					state <= Wr_miss_load_b;
+					state <= Wr_miss_load_a;
 										
-				when Wr_miss_load_b =>
+				when Wr_miss_load_a =>
 					cache(line_int, 0) <= ram_output(15 downto 0);
 					cache(line_int, 1) <= ram_output(31 downto 16);
 					loaddelay := LD_delay;
@@ -277,9 +277,9 @@ begin
 				when Rd_miss_load =>
 					addr_b <= addr_a(9 downto 1);
 					re_b <= '1';
-					state <= Rd_miss_load_b;
+					state <= Rd_miss_load_a;
 										
-				when Rd_miss_load_b =>
+				when Rd_miss_load_a =>
 				   cache_line_dirty_bits(line_int) <= '0';
 					cache(line_int, 0) <= ram_output(15 downto 0);
 					cache(line_int, 1) <= ram_output(31 downto 16);
