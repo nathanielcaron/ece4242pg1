@@ -90,4 +90,5 @@ set_global_assignment -name VHDL_FILE addrmux.vhd
 set_global_assignment -name VHDL_FILE datamux.vhd
 set_global_assignment -name VHDL_FILE cache.vhd
 set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
+
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
