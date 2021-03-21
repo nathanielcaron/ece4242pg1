@@ -1,0 +1,26 @@
+-- Test program 4
+-- test miss with dirty bit where instructions get replaced by data in cache.
+-- program should output 1.
+
+-- The system will replace the instructions by data to write to block 5 word 1 (miss + writeback),
+-- It will then bring back the instructions to output the value,
+-- It will once again replace the instructions by data to output block 5 word 1,
+-- Finally it will bring back the instructions to halt.
+
+-- Code:
+-- x"3201",	   	    -- R2 <- #1
+-- x"1208",         -- M[8] <- R2       (test writing to block 5 word 1)
+-- x"7008",			-- output<- M[8]    (test output from block 5 word 1)
+-- x"F000",         -- halt
+
+WIDTH=32;
+DEPTH=512;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    0           :       12083201;       -- M[8] <- R2, R2 <- #1
+    1           :       F0007008;       -- halt, output<- M[8]
+    [2..511]    :       00000000;       -- 0, 0
+END;
