@@ -42,6 +42,7 @@ port( sys_clk                               :    in std_logic;
 		  D_cachew7       :     out std_logic_vector(15 downto 0);
 		  D_cache_hit                           : out std_logic;
 		  D_addr_b            : out std_logic_vector(8 downto 0);
+		  --D_cache_ready   :     out std_logic;
 		  D_init_count : out std_logic_vector(1 downto 0)
         -- end debug variables    
 );
@@ -113,6 +114,7 @@ Unit4: cache port map(sys_rst, sys_clk, mem_addr, mdin_bus, mdin_bus32, Mwe, Mre
 	 D_addr_b <= mem_addr9;
 	 D_init_count <= init_count_db;
 	 D_RAM_d_out <= mdout_bus32;
+	 --D_cache_ready <= cache_ready;
 -- end debug variables        
         
 end rtl;

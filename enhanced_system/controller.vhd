@@ -128,13 +128,13 @@ begin
 	  when S3b => 	RFwe_ctrl <= '0';
 			state <= S1;
 	    
-	  when S4 =>	RFr1a_ctrl <= IR_word(11 downto 8);	
-			RFr1e_ctrl <= '1'; -- mem[direct] <= RF[rn]			
+	  when S4 =>	RFr1a_ctrl <= IR_word(11 downto 8);
+		 	RFr1e_ctrl <= '1'; -- mem[direct] <= RF[rn]			
 			Ms_ctrl <= "01";
 			ALUs_ctrl <= "000";	  
 			IRld_ctrl <= '0';
 			state <= S4a;			-- read value from RF
-			
+		 			
 	  when S4a =>   Mre_ctrl <= '0';
 	      if cache_ready = '1' then
 				Mwe_ctrl <= '1';		-- write into memory

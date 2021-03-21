@@ -70,7 +70,7 @@ architecture behav of cache is
 	--setting up state for case structure
 	type state_type is (Init, Wr_miss, Wr_miss_writeback, Wr_miss_writeback_a, writeback_delay, Wr_miss_load, Wr_miss_load_a, load_delay, 
 	actually_writing, Rd_miss, Rd_miss_writeback, Rd_miss_writeback_a, writeback_delay_rd, Rd_miss_load, Rd_miss_load_a, load_delay_rd,
-	actually_reading, startup, startup_a, startup_b, startup_delay);
+	actually_reading, startup, startup_a, startup_b, startup_delay, Rd_miss_load_b, Wr_miss_load_b);
 	signal state: state_type;
 	signal delaystate: state_type;
 	signal current_State : state_type;
@@ -218,22 +218,28 @@ begin
 					
 				when Wr_miss_load =>
 					addr_b <= addr_a(9 downto 1);
-					re_b <= '1';
 					state <= Wr_miss_load_a;
-										
+					
 				when Wr_miss_load_a =>
-					cache(line_int, 0) <= ram_output(15 downto 0);
-					cache(line_int, 1) <= ram_output(31 downto 16);
+					re_b <= '1';
 					loaddelay := LD_delay;
 					state <= load_delay;
-				
-				when load_delay =>
+					
+			   when load_delay =>
 					if loaddelay = 0 then
-						state <= actually_writing;
+						state <= Wr_miss_load_b;
 					else
 						state <= load_delay;
 						loaddelay := loaddelay-1;
 					end if;
+										
+				when Wr_miss_load_b =>
+					cache_line_dirty_bits(line_int) <= '0';
+					cache(line_int, 0) <= ram_output(15 downto 0);
+					cache(line_int, 1) <= ram_output(31 downto 16);
+					state <= actually_writing;
+				
+				
 				
 				when actually_writing =>
 					re_b <= '0';
@@ -276,23 +282,28 @@ begin
 					
 				when Rd_miss_load =>
 					addr_b <= addr_a(9 downto 1);
-					re_b <= '1';
 					state <= Rd_miss_load_a;
 										
 				when Rd_miss_load_a =>
-				   cache_line_dirty_bits(line_int) <= '0';
-					cache(line_int, 0) <= ram_output(15 downto 0);
-					cache(line_int, 1) <= ram_output(31 downto 16);
+				   re_b <= '1';
 					loaddelay := LD_delay;
 					state <= load_delay_rd;
-				
+					
 				when load_delay_rd =>
 					if loaddelay = 0 then
-						state <= actually_reading;
+						state <= Rd_miss_load_b;
 					else
 						state <= load_delay_rd;
 						loaddelay := loaddelay-1;
 					end if;
+					
+				when Rd_miss_load_b =>
+				   cache_line_dirty_bits(line_int) <= '0';
+					cache(line_int, 0) <= ram_output(15 downto 0);
+					cache(line_int, 1) <= ram_output(31 downto 16);
+					state <= actually_reading;
+				
+				
 				
 				when actually_reading =>
 					re_b <= '0';
