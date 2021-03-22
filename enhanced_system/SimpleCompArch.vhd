@@ -27,23 +27,25 @@ port( sys_clk                               :    in std_logic;
         -- end debug variables    
 
         -- Debug signals from Memory: output for simulation purpose only    
-        D_mdout_bus,D_mdin_bus                : out std_logic_vector(15 downto 0);
-		  D_RAM_d_out : out std_logic_vector(31 downto 0); 
-        D_mem_addr                            : out std_logic_vector(9 downto 0); 
-        D_Mre,D_Mwe                           : out std_logic;
-        D_RAMre,D_RAMwe                           : out std_logic;
-		  D_cachew0       :     out std_logic_vector(15 downto 0);
-		  D_cachew1       :     out std_logic_vector(15 downto 0);
-		  D_cachew2       :     out std_logic_vector(15 downto 0);
-		  D_cachew3       :     out std_logic_vector(15 downto 0);
-		  D_cachew4       :     out std_logic_vector(15 downto 0);
-		  D_cachew5       :     out std_logic_vector(15 downto 0);
-		  D_cachew6       :     out std_logic_vector(15 downto 0);
-		  D_cachew7       :     out std_logic_vector(15 downto 0);
-		  D_cache_hit                           : out std_logic;
-		  D_addr_b            : out std_logic_vector(8 downto 0);
-		  --D_cache_ready   :     out std_logic;
-		  D_init_count : out std_logic_vector(1 downto 0)
+        D_mdout_bus,D_mdin_bus                	: out std_logic_vector(15 downto 0);
+		  D_RAM_d_out 										: out std_logic_vector(31 downto 0); 
+        D_mem_addr                            	: out std_logic_vector(9 downto 0); 
+        D_Mre,D_Mwe                           	: out std_logic;
+        D_RAMre,D_RAMwe                         : out std_logic;
+		  D_cachew0       								: out std_logic_vector(15 downto 0);
+		  D_cachew1       								: out std_logic_vector(15 downto 0);
+		  D_cachew2       								: out std_logic_vector(15 downto 0);
+		  D_cachew3       								: out std_logic_vector(15 downto 0);
+		  D_cachew4       								: out std_logic_vector(15 downto 0);
+		  D_cachew5       								: out std_logic_vector(15 downto 0);
+		  D_cachew6       								: out std_logic_vector(15 downto 0);
+		  D_cachew7       								: out std_logic_vector(15 downto 0);
+		  D_cache_hit                           	: out std_logic;
+		  D_addr_b            							: out std_logic_vector(8 downto 0);
+		  D_cache_ready   								: out std_logic;
+		  D_init_count 									: out std_logic_vector(1 downto 0);
+		  ctrl_state 										: out std_logic_vector(7 downto 0);
+		  D_PC												: 	out std_logic_vector(15 downto 0)
         -- end debug variables    
 );
 end;
@@ -62,18 +64,19 @@ architecture rtl of SimpleCompArch is
     signal Mwe32                : std_logic;                    -- Mem. write enable     (CTRLER    -> Mem)
     signal cache_ready          : std_logic;
 	 signal cache_hit            : std_logic;  
-	 signal cachew0_db       :     std_logic_vector(15 downto 0);
-	 signal cachew1_db       :     std_logic_vector(15 downto 0);
-	 signal cachew2_db       :     std_logic_vector(15 downto 0);
-	 signal cachew3_db       :     std_logic_vector(15 downto 0);
-	 signal cachew4_db       :     std_logic_vector(15 downto 0);
-	 signal cachew5_db       :     std_logic_vector(15 downto 0);
-	 signal cachew6_db       :     std_logic_vector(15 downto 0);
-	 signal cachew7_db       :     std_logic_vector(15 downto 0);
-	 signal init_count_db : std_logic_vector(1 downto 0);
+	 signal cachew0_db       	:     std_logic_vector(15 downto 0);
+	 signal cachew1_db       	:     std_logic_vector(15 downto 0);
+	 signal cachew2_db       	:     std_logic_vector(15 downto 0);
+	 signal cachew3_db       	:     std_logic_vector(15 downto 0);
+	 signal cachew4_db       	:     std_logic_vector(15 downto 0);
+	 signal cachew5_db       	:     std_logic_vector(15 downto 0);
+	 signal cachew6_db       	:     std_logic_vector(15 downto 0);
+	 signal cachew7_db       	:     std_logic_vector(15 downto 0);
+	 signal init_count_db 		: std_logic_vector(1 downto 0);
 
     --System local variables
-    signal oe                   : std_logic;    
+    signal oe                   : std_logic;
+	 signal ct_state : std_logic_vector(7 downto 0);    
 begin
 
 Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe, 
@@ -84,7 +87,8 @@ Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe,
 						  D_ALUs,
 						  D_PCld,
 						  D_jpz,           --Debug signals
-                    cache_ready);                                          --cache
+                    cache_ready, ct_state,					--cache
+						  D_PC);
                     
                                                                                     
 Unit2: ram32bus port map(mem_addr9, sys_clk, mdin_bus32, Mre32, Mwe32, mdout_bus32);
@@ -115,6 +119,8 @@ Unit4: cache port map(sys_rst, sys_clk, mem_addr, mdin_bus, mdin_bus32, Mwe, Mre
 	 D_init_count <= init_count_db;
 	 D_RAM_d_out <= mdout_bus32;
 	 --D_cache_ready <= cache_ready;
+	 ctrl_state <= ct_state;
+	 D_cache_ready <= cache_ready;
 -- end debug variables        
         
 end rtl;
