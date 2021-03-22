@@ -7,6 +7,7 @@
 -- x"7006",			-- output<- M[6]    (test output from block 4 word 1)
 -- x"020E",			-- R2 <- M[14]      (test reading from block 8 word 1)
 -- x"700E",			-- output<- M[14]   (test output from block 4 word 1)
+-- x"F000",         -- halt
 
 WIDTH=32;
 DEPTH=512;

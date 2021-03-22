@@ -31,7 +31,9 @@ port( cpu_clk           : in std_logic;
         D_PCld_s, D_jpz_s                : out std_logic;
         -- end debug variables        
         --cache
-        cache_ready      : in std_logic
+        cache_ready      : in std_logic;
+		  ctrl_state : out std_logic_vector(7 downto 0);
+		  D_PC			: 	out std_logic_vector(15 downto 0)
         );
 end;
 
@@ -58,12 +60,13 @@ begin
 										  Mre_s,
 										  Mwe_s,
 										  oe_s,
-                                cache_ready                                              --cache
+                                cache_ready,                                              --cache
+										  ctrl_state,
+										  D_PC
                                 );
     Unit1: datapath port map( cpu_clk,cpu_rst,immd_bus,mdout_bus, RFs_s,RFwa_s,RFr1a_s,
                               RFr2a_s,RFwe_s,RFr1e_s,RFr2e_s,jpz_s,ALUs_s,PCld_s,rfout_bus, mdin_bus);
 
-                                
 -- Assignment of debug variables    
         D_rfout_bus<= rfout_bus;
         D_RFwa_s<= RFwa_s;

@@ -81,7 +81,9 @@ port (
 		  D_ALUs_s : out std_logic_vector(2 downto 0);
         D_PCld_s, D_jpz_s: out std_logic;
         -- end debug variables
-        cache_ready      : in std_logic     
+        cache_ready      : in std_logic;
+		  ctrl_state : out std_logic_vector(7 downto 0);
+		  D_PC			: 	out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -128,7 +130,8 @@ port(
     Ms_ctrl:      out std_logic_vector(1 downto 0);
     Mre_ctrl:     out std_logic;
     Mwe_ctrl:     out std_logic;
-    oe_ctrl:      out std_logic
+    oe_ctrl:	out std_logic;
+	 ctrl_state : out std_logic_vector(7 downto 0)
       
 );
 end component;
@@ -208,7 +211,9 @@ port(
     Mre_cu:        out     std_logic;
     Mwe_cu:        out     std_logic;
     oe_cu:         out     std_logic;
-    cache_ready:   in std_logic  
+    cache_ready:   in std_logic;
+	 ctrl_state : out std_logic_vector(7 downto 0);
+	 D_PC			: 	out std_logic_vector(15 downto 0)
 );
 end component;
 

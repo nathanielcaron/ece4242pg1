@@ -1,6 +1,6 @@
 -- Test program 3
 -- test miss with clean bit where instructions get replaced by data in cache.
--- program should output 1.
+-- program should output 2.
 
 -- The system will replace the instructions by data to output block 5 word 1 (miss),
 -- It will then bring back the instructions to halt.
@@ -20,10 +20,10 @@ CONTENT BEGIN
     1           :       00000000;       -- 0, 0
     2           :       00000000;       -- 0, 0
     3           :       00000000;       -- 0, 0
-    4           :       00000000;       -- 0, 0
+    4           :       00000002;       -- 0, 2
     5           :       00000000;       -- 0, 0
     6           :       00000000;       -- 0, 0
     7           :       00000000;       -- 0, 0
-    8           :       00000001;       -- 0, 1
+    8           :       00000000;       -- 0, 0
     [9..511]    :       00000000;       -- 0, 0
 END;
