@@ -35,7 +35,8 @@ port (
 		cachew5_db       :     out std_logic_vector(15 downto 0);
 		cachew6_db       :     out std_logic_vector(15 downto 0);
 		cachew7_db       :     out std_logic_vector(15 downto 0);
-		init_count_db : out std_logic_vector(1 downto 0)
+		init_count_db : out std_logic_vector(1 downto 0);
+		c_state : out std_logic_vector(7 downto 0)
 	 
 );
 end;
@@ -127,6 +128,57 @@ begin
 			re_b <= '0';
 			
 		elsif rising_edge(clock_a) then
+			case state is
+				when startup =>
+					c_state <= x"00";
+				when startup_a =>
+					c_state <= x"01";
+				when startup_b =>
+					c_state <= x"02";
+				when startup_delay =>
+					c_state <= x"03";
+				when Init =>
+					c_state <= x"10";
+				when Wr_miss =>
+					c_state <= x"20";
+				when Wr_miss_writeback =>
+					c_state <= x"21";
+				when Wr_miss_writeback_a =>
+					c_state <= x"22";
+				when writeback_delay =>
+					c_state <= x"23";
+				when Wr_miss_load =>
+					c_state <= x"24";
+				when Wr_miss_load_a =>
+					c_state <= x"25";
+				when Wr_miss_load_b =>
+					c_state <= x"26";
+				when load_delay =>
+					c_state <= x"27";
+				when actually_writing =>
+					c_state <= x"28";
+				when Rd_miss =>
+					c_state <= x"30";
+				when Rd_miss_writeback =>
+					c_state <= x"31";
+				when Rd_miss_writeback_a =>
+					c_state <= x"32";
+				when writeback_delay_rd =>
+					c_state <= x"33";
+				when Rd_miss_load =>
+					c_state <= x"34";
+				when Rd_miss_load_a =>
+					c_state <= x"35";
+				when Rd_miss_load_b =>
+					c_state <= x"36";
+				when load_delay_rd =>
+					c_state <= x"37";
+				when actually_reading =>
+					c_state <= x"38";
+				when others =>
+					c_state <= x"FF";
+			end case;
+			
 			case state is
 				--initializing cache
 				when startup =>
