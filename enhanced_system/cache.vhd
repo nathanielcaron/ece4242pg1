@@ -163,7 +163,7 @@ begin
 				when Init =>
 					-- set ready flag to one
 					rdy_signal <= '1';
-				
+					
 					
 					if we_a = '1' and re_a = '0' then
 						if hit_flag = '1' then
@@ -173,7 +173,7 @@ begin
 							cache_line_dirty_bits(line_int) <= '1';
 							--go wait for next address
 							state <= Init;
-						else
+						elsif hit_flag = '0' then
 							state <= Wr_miss;
 							rdy_signal <= '0';
 						end if;
@@ -181,10 +181,11 @@ begin
 						if hit_flag = '1' then
 							data_out_a <= cache(line_int, word_int);
 							state <= Init;
-						else
+						elsif hit_flag = '0' then
 							data_out_a <= "ZZZZZZZZZZZZZZZZ";
 							state <= Rd_miss;
 							rdy_signal <= '0';
+													
 						end if;
 					end if;
 			--Writing states
@@ -221,9 +222,18 @@ begin
 					state <= Wr_miss_load_a;
 					
 				when Wr_miss_load_a =>
+					if hit_flag = '1' then
+					-- write to word at the correct line and word index
+					cache(line_int, word_int) <= data_in_a;
+					-- MUST MARK BIT AS DIRTY
+					cache_line_dirty_bits(line_int) <= '1';
+					--go wait for next address
+					state <= Init;
+					else
 					re_b <= '1';
 					loaddelay := LD_delay;
 					state <= load_delay;
+					end if;
 					
 			   when load_delay =>
 					if loaddelay = 0 then
@@ -285,9 +295,14 @@ begin
 					state <= Rd_miss_load_a;
 										
 				when Rd_miss_load_a =>
+					if hit_flag = '1' then
+					data_out_a <= cache(line_int, word_int);
+					state <= Init;
+					else
 				   re_b <= '1';
 					loaddelay := LD_delay;
 					state <= load_delay_rd;
+					end if;
 					
 				when load_delay_rd =>
 					if loaddelay = 0 then
