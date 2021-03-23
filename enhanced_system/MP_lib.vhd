@@ -47,7 +47,8 @@ port(
 	 cachew5_db       :     out std_logic_vector(15 downto 0);
 	 cachew6_db       :     out std_logic_vector(15 downto 0);
 	 cachew7_db       :     out std_logic_vector(15 downto 0);
-	 init_count_db : out std_logic_vector(1 downto 0)
+	 init_count_db : out std_logic_vector(1 downto 0);
+	 c_state : out std_logic_vector(7 downto 0)
 );
 end component;
 
