@@ -38,7 +38,17 @@ port(
     re_b             :     out std_logic;
 	 data_out_a       :     out std_logic_vector(15 downto 0);
     ram_output       :     in std_logic_vector(31 downto 0);
-	 hit              :     out std_logic
+	 hit              :     out std_logic;
+	 cachew0_db       :     out std_logic_vector(15 downto 0);
+	 cachew1_db       :     out std_logic_vector(15 downto 0);
+	 cachew2_db       :     out std_logic_vector(15 downto 0);
+	 cachew3_db       :     out std_logic_vector(15 downto 0);
+	 cachew4_db       :     out std_logic_vector(15 downto 0);
+	 cachew5_db       :     out std_logic_vector(15 downto 0);
+	 cachew6_db       :     out std_logic_vector(15 downto 0);
+	 cachew7_db       :     out std_logic_vector(15 downto 0);
+	 init_count_db : out std_logic_vector(1 downto 0);
+	 c_state : out std_logic_vector(7 downto 0)
 );
 end component;
 
@@ -72,7 +82,9 @@ port (
 		  D_ALUs_s : out std_logic_vector(2 downto 0);
         D_PCld_s, D_jpz_s: out std_logic;
         -- end debug variables
-        cache_ready      : in std_logic     
+        cache_ready      : in std_logic;
+		  ctrl_state : out std_logic_vector(7 downto 0);
+		  D_PC			: 	out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -119,7 +131,8 @@ port(
     Ms_ctrl:      out std_logic_vector(1 downto 0);
     Mre_ctrl:     out std_logic;
     Mwe_ctrl:     out std_logic;
-    oe_ctrl:      out std_logic
+    oe_ctrl:	out std_logic;
+	 ctrl_state : out std_logic_vector(7 downto 0)
       
 );
 end component;
@@ -199,7 +212,9 @@ port(
     Mre_cu:        out     std_logic;
     Mwe_cu:        out     std_logic;
     oe_cu:         out     std_logic;
-    cache_ready:   in std_logic  
+    cache_ready:   in std_logic;
+	 ctrl_state : out std_logic_vector(7 downto 0);
+	 D_PC			: 	out std_logic_vector(15 downto 0)
 );
 end component;
 

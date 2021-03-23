@@ -34,7 +34,9 @@ port(clock_cu:    in     std_logic;
     Mwe_cu:       out    std_logic;
     oe_cu:        out    std_logic;
     --cache
-    cache_ready:  in     std_logic
+    cache_ready:  in     std_logic;
+	 ctrl_state : 	out std_logic_vector(7 downto 0);
+	 D_PC			: 	out std_logic_vector(15 downto 0)
 );
 end;
 
@@ -54,11 +56,13 @@ begin
   U0: controller port map(clock_cu,rst_cu,IR_sig, cache_ready,RFs_cu,RFwa_cu,
                 RFr1a_cu,RFr2a_cu,RFwe_cu,RFr1e_cu,
                 RFr2e_cu,ALUs_cu,jpen_cu,PCinc_sig,
-                PCclr_sig,IRld_sig,Ms_sig,Mre_cu,Mwe_cu,oe_cu);
+                PCclr_sig,IRld_sig,Ms_sig,Mre_cu,Mwe_cu,oe_cu,ctrl_state);
                                                             
                 
   U1: PC port map(clock_cu,PCld_cu, PCinc_sig, PCclr_sig, IR2mux_a, PC2mux);
   U2: IR port map(mdata_out, IRld_sig, IR2mux_a, IR_sig);
   U3: addrmux port map(dpdata_out,IR2mux_a,PC2mux,IR2mux_b,Ms_sig,maddr_in);
+  
+  D_PC <= PC2mux;
 
 end struct;
