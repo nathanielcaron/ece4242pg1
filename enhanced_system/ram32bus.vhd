@@ -51,6 +51,18 @@ ENTITY ram32bus IS
     );
 END ram32bus;
 
+-- Test Memory Files --
+
+-- test_0_halt.mif
+-- test_1_hit.mif
+-- test_2_clean_miss.mif
+-- test_3_hit_clean_miss.mif
+-- test_4_hit_dirty_miss.mif
+-- test_5_replacement_clean_miss.mif
+-- test_6_replacement_dirty_miss.mif
+-- test_7_clean_miss_new_op_code.mif
+-- benchmark.mif
+
 
 ARCHITECTURE SYN OF ram32bus IS
 
@@ -63,7 +75,7 @@ BEGIN
     GENERIC MAP (
         clock_enable_input_a => "BYPASS",
         clock_enable_output_a => "BYPASS",
-        init_file => "test_3_hit_clean_miss.mif",
+        init_file => "test_7_clean_miss_new_op_code.mif",
         intended_device_family => "Cyclone IV E",
         lpm_hint => "ENABLE_RUNTIME_MOD=NO",
         lpm_type => "altsyncram",
