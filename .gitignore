@@ -66,3 +66,4 @@ incremental_db/
 db/
 output_files/
 PLLJ_PLLSPE_INFO.txt
+.DS_Store
