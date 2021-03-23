@@ -1,4 +1,4 @@
--- cache memory module (SSRAM)
+-- cache memory module
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -26,8 +26,16 @@ port (
 		re_b             :     out std_logic;
       data_out_a       :     out std_logic_vector(15 downto 0);
       ram_output       :     in std_logic_vector(31 downto 0);
-	   hit				  : 	  out std_logic
-	 
+	   hit				  : 	  out std_logic;
+		cachew0_db       :     out std_logic_vector(15 downto 0);
+		cachew1_db       :     out std_logic_vector(15 downto 0);
+		cachew2_db       :     out std_logic_vector(15 downto 0);
+		cachew3_db       :     out std_logic_vector(15 downto 0);
+		cachew4_db       :     out std_logic_vector(15 downto 0);
+		cachew5_db       :     out std_logic_vector(15 downto 0);
+		cachew6_db       :     out std_logic_vector(15 downto 0);
+		cachew7_db       :     out std_logic_vector(15 downto 0);
+		init_count_db 	  : out std_logic_vector(1 downto 0)
 );
 end;
 
@@ -68,15 +76,45 @@ architecture behav of cache is
 	signal hit_flag : std_logic;
 	signal init_count : integer range 0 to 3 := 0;
 begin
+
+	-- Break down address into bit structure (tag = 6 bits, line = 2 bits, word = 1 bit)
+	address_tag <= addr_a(9 downto 3);
+	address_line <= addr_a(2 downto 1);
+	address_word <= addr_a(0);
+	-- Convert line and word to integers to index into cache array
+	word_int <= 1 when address_word = '1' else 0;
+	line_int <= to_integer(unsigned(address_line));
+	
+	-- Determine whether there is a HIT or a MISS
+	hit_flag <= 'Z' when (we_a='0' and re_a='0') else
+					'1' when address_tag = cache_line_tags(line_int) else
+					'0';
+
+	-- main process
 	process (clock_a, rst)
-	variable writebackdelay: integer range 0 to 12;
-	variable loaddelay: integer range 0 to 12;
+		variable writebackdelay	: integer range 0 to 15;
+		variable loaddelay		: integer range 0 to 15;
 
 	begin
+		--debug
+		cachew0_db <= cache(0,0);
+		cachew1_db <= cache(0,1);
+		cachew2_db <= cache(1,0);
+		cachew3_db <= cache(1,1);
+		cachew4_db <= cache(2,0);
+		cachew5_db <= cache(2,1);
+		cachew6_db <= cache(3,0);
+		cachew7_db <= cache(3,1);
+		init_count_db <= std_logic_vector(to_unsigned(init_count, 2));
+		
 		if rst='1' then
 			state <= startup;
-			
+			rdy_signal <= '0';
+			we_b <= '0';
+			re_b <= '0';
+
 		elsif rising_edge(clock_a) then
+
 			case state is
 				--initializing cache
 				when startup =>
@@ -85,8 +123,23 @@ begin
 					state <= startup_a;
 
 				when startup_a =>
-					cache(init_count, 0) <= ram_output(15 downto 0);
-					cache(init_count, 1) <= ram_output(31 downto 16);
+					loaddelay := LD_delay_startup;
+					state <= startup_delay;
+					
+				when startup_delay =>
+					if loaddelay = 0 then
+						state <= startup_b;
+						loaddelay := LD_delay_startup;
+						cache(init_count, 0) <= ram_output(15 downto 0);
+						cache(init_count, 1) <= ram_output(31 downto 16);
+						-- update tags
+						cache_line_tags(init_count) <= std_logic_vector(to_unsigned(init_count, 10))(9 downto 3);
+					else
+						state <= startup_delay;
+						loaddelay := loaddelay-1;
+					end if;
+					
+				when startup_b =>
 					if init_count = 3 then
 						state <= Init;
 						init_count <= 0;
@@ -100,34 +153,6 @@ begin
 				when Init =>
 					-- set ready flag to one
 					rdy_signal <= '1';
-				
-					if we_a = '1' xor re_a = '1' then
-						-- Break down address into bit structure (tag = 6 bits, line = 2 bits, word = 1 bit)
-						address_tag <= addr_a(9 downto 3);
-						address_line <= addr_a(2 downto 1);
-						address_word <= addr_a(0);
-						-- Convert line and word to integers to index into cache array
-						if address_word = '1' then
-							word_int <= 1;
-						else
-							word_int <= 0;
-						end if;
-						
-						line_int <= to_integer(unsigned(address_line));
-
-						-- Determine whether there is a HIT or a MISS
-						if address_tag = cache_line_tags(line_int) then
-							hit_flag <= '1';
-						else 
-							hit_flag <= '0';
-						end if;
-					else
-						hit_flag <= 'Z';
-						address_tag <= "ZZZZZZZ";
-						address_line <= "ZZ";
-						address_word <= 'Z';
-					end if;
-					
 					if we_a = '1' and re_a = '0' then
 						if hit_flag = '1' then
 							-- write to word at the correct line and word index
@@ -136,23 +161,28 @@ begin
 							cache_line_dirty_bits(line_int) <= '1';
 							--go wait for next address
 							state <= Init;
-						else
+						elsif hit_flag = '0' then
 							state <= Wr_miss;
 							rdy_signal <= '0';
+						else
+							state <= Init;
 						end if;
 					elsif we_a = '0' and re_a = '1' then
 						if hit_flag = '1' then
 							data_out_a <= cache(line_int, word_int);
 							state <= Init;
-						else
+						elsif hit_flag = '0' then
 							data_out_a <= "ZZZZZZZZZZZZZZZZ";
 							state <= Rd_miss;
 							rdy_signal <= '0';
+						else
+							state <= Init;
 						end if;
 					end if;
-			--Writing states						
-				when Wr_miss =>
-					if cache_line_dirty_bits(line_int) = '1' then
+
+			--Writing states
+				when Wr_miss => 
+					if cache_line_dirty_bits(line_int) = '1' then --could check in previous state if line_int is safe
 						state <= Wr_miss_writeback;
 					else
 						state <= Wr_miss_load;
@@ -200,7 +230,15 @@ begin
 					else
 						state <= load_delay;
 					end if;
-				
+										
+				when Wr_miss_load_b =>
+					cache_line_dirty_bits(line_int) <= '0';
+					cache(line_int, 0) <= ram_output(15 downto 0);
+					cache(line_int, 1) <= ram_output(31 downto 16);
+					-- update tags
+					cache_line_tags(line_int) <= address_tag;
+					state <= actually_writing;
+
 				when actually_writing =>
 					re_b <= '0';
 					-- write to word at the correct line and word index
@@ -262,16 +300,28 @@ begin
 					else
 						state <= load_delay_rd;
 					end if;
-				
+					
+				when Rd_miss_load_b =>
+					-- Writing to cache
+				   cache_line_dirty_bits(line_int) <= '0';
+					cache(line_int, 0) <= ram_output(15 downto 0);
+					cache(line_int, 1) <= ram_output(31 downto 16);
+					-- update tags
+					cache_line_tags(line_int) <= address_tag;
+					state <= actually_reading;
+
 				when actually_reading =>
 					re_b <= '0';
 					data_out_a <= cache(line_int, word_int);
 					state <= Init;
 					rdy_signal <= '1';
 												
-			end case;	
+			end case;
+	
 		end if;
+
 		cache_ready <= rdy_signal;
 		hit <= hit_flag;
+
 	end process;
 end behav;

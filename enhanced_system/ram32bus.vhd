@@ -63,7 +63,7 @@ BEGIN
     GENERIC MAP (
         clock_enable_input_a => "BYPASS",
         clock_enable_output_a => "BYPASS",
-        init_file => "mem_init32bus.mif",
+        init_file => "test_6_replacement_dirty_miss.mif",
         intended_device_family => "Cyclone IV E",
         lpm_hint => "ENABLE_RUNTIME_MOD=NO",
         lpm_type => "altsyncram",
