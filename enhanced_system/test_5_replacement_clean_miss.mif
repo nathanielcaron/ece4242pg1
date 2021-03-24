@@ -1,4 +1,4 @@
--- Test program 3
+-- Test program 5
 -- test miss with clean bit where instructions get replaced by data in cache.
 -- program should output 2.
 

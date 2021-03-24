@@ -74,8 +74,8 @@ architecture rtl of SimpleCompArch is
 	 signal cachew6_db       	:     std_logic_vector(15 downto 0);
 	 signal cachew7_db       	:     std_logic_vector(15 downto 0);
 	 signal init_count_db 		: std_logic_vector(1 downto 0);
-	 signal c_state : std_logic_vector(7 downto 0);
-	 signal ct_state : std_logic_vector(7 downto 0);
+	 signal c_state 				: std_logic_vector(7 downto 0);
+	 signal ct_state 				: std_logic_vector(7 downto 0);
 
     --System local variables
     signal oe                   : std_logic;    
