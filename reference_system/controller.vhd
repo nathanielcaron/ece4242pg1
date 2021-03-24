@@ -40,7 +40,7 @@ architecture fsm of controller is
 
   type state_type is (S0,Sdly,S1,S1a,S1b,S2,S3,S3a,S3b,S4,S4a,S4b,S5,S5a,S5b,
 			S6,S6a,S7,S7a,S7b,S8,S8a,S8b,S9,S9a,S9b,S10,S11,S11a,s12,s12a,s12b,
-			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d);
+			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d, S16, S16a);
   signal state: state_type;
   signal delaystate: state_type;
   constant memdelay: integer :=16;
@@ -116,6 +116,7 @@ begin
 				 when div =>	state <= s13;
 				 when greater =>	state <= s14;
 				 when mov5 => state <= s15;
+				 when mov4_12 =>	state <= S16;
 			    when others => 	state <= S1;
 			    end case;
 					
@@ -302,6 +303,16 @@ begin
 			RFwe_ctrl <= '0';
 			RFr1e_ctrl <= '0';
 			state <= s1;
+
+		when S16 =>	
+			RFwa_ctrl <= "1110"; -- R14
+			RFwe_ctrl <= '1'; -- RF[rn] <= imm.
+			RFs_ctrl <= "10";
+			IRld_ctrl <= '0';
+			state <= S16a;
+		when S16a =>   
+			RFwe_ctrl <= '0';
+			state <= S1;
 
 	  when others =>
 	end case;

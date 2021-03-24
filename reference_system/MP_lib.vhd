@@ -14,11 +14,16 @@ constant mov1 : std_logic_vector(3 downto 0) := "0000";
 constant mov2 : std_logic_vector(3 downto 0) := "0001";
 constant mov3 : std_logic_vector(3 downto 0) := "0010";
 constant mov4 : std_logic_vector(3 downto 0) := "0011";
+constant mov4_12 		: std_logic_vector(3 downto 0) := "1100";
 constant add  : std_logic_vector(3 downto 0) := "0100";
 constant subt : std_logic_vector(3 downto 0) := "0101";
 constant jz  : std_logic_vector(3 downto 0) := "0110";
 constant halt  : std_logic_vector(3 downto 0) := "1111";
 constant readm  : std_logic_vector(3 downto 0) := "0111";
+constant mult	: std_logic_vector(3 downto 0) := "1000";
+constant div	: std_logic_vector(3 downto 0) := "1001";
+constant greater : std_logic_vector(3 downto 0) := "1010";
+constant mov5 : std_logic_vector(3 downto 0) := "1011";
 
 component ram
 	PORT
@@ -31,10 +36,6 @@ component ram
 		q		: OUT STD_LOGIC_VECTOR (15 DOWNTO 0)
 	);
 end component;
-constant mult	: std_logic_vector(3 downto 0) := "1000";
-constant div	: std_logic_vector(3 downto 0) := "1001";
-constant greater : std_logic_vector(3 downto 0) := "1010";
-constant mov5 : std_logic_vector(3 downto 0) := "1011";
 
 component CPU is
 port (	
