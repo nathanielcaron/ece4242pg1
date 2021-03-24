@@ -1,4 +1,4 @@
--- Test program 2
+-- Test program 4
 -- test hit and miss with dirty bit
 -- program should output 8, then 9
 

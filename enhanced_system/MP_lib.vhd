@@ -5,21 +5,22 @@ use ieee.std_logic_arith.all;
 
 package MP_lib is
 
-constant ZERO : std_logic_vector(15 downto 0) := "0000000000000000";
-constant HIRES : std_logic_vector(15 downto 0) := "ZZZZZZZZZZZZZZZZ";
-constant mov1 : std_logic_vector(3 downto 0) := "0000";
-constant mov2 : std_logic_vector(3 downto 0) := "0001";
-constant mov3 : std_logic_vector(3 downto 0) := "0010";
-constant mov4 : std_logic_vector(3 downto 0) := "0011";
-constant add  : std_logic_vector(3 downto 0) := "0100";
-constant subt : std_logic_vector(3 downto 0) := "0101";
-constant jz  : std_logic_vector(3 downto 0) := "0110";
-constant halt  : std_logic_vector(3 downto 0) := "1111";
-constant readm  : std_logic_vector(3 downto 0) := "0111";
-constant mult	: std_logic_vector(3 downto 0) := "1000";
-constant div	: std_logic_vector(3 downto 0) := "1001";
-constant greater : std_logic_vector(3 downto 0) := "1010";
-constant mov5 : std_logic_vector(3 downto 0) := "1011";
+constant ZERO 			: std_logic_vector(15 downto 0) := "0000000000000000";
+constant HIRES 		: std_logic_vector(15 downto 0) := "ZZZZZZZZZZZZZZZZ";
+constant mov1 			: std_logic_vector(3 downto 0) := "0000";
+constant mov2 			: std_logic_vector(3 downto 0) := "0001";
+constant mov3 			: std_logic_vector(3 downto 0) := "0010";
+constant mov4 			: std_logic_vector(3 downto 0) := "0011";
+constant mov4_12 		: std_logic_vector(3 downto 0) := "1100";
+constant add  			: std_logic_vector(3 downto 0) := "0100";
+constant subt 			: std_logic_vector(3 downto 0) := "0101";
+constant jz  			: std_logic_vector(3 downto 0) := "0110";
+constant halt  		: std_logic_vector(3 downto 0) := "1111";
+constant readm  		: std_logic_vector(3 downto 0) := "0111";
+constant mult			: std_logic_vector(3 downto 0) := "1000";
+constant div			: std_logic_vector(3 downto 0) := "1001";
+constant greater 		: std_logic_vector(3 downto 0) := "1010";
+constant mov5 			: std_logic_vector(3 downto 0) := "1011";
 
 component cache is
 port(
@@ -47,7 +48,8 @@ port(
 	 cachew5_db       :     out std_logic_vector(15 downto 0);
 	 cachew6_db       :     out std_logic_vector(15 downto 0);
 	 cachew7_db       :     out std_logic_vector(15 downto 0);
-	 init_count_db : out std_logic_vector(1 downto 0)
+	 init_count_db : out std_logic_vector(1 downto 0);
+	 c_state : out std_logic_vector(7 downto 0)
 );
 end component;
 

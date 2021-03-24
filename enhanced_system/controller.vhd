@@ -43,56 +43,11 @@ architecture fsm of controller is
 
   type state_type is (S0,S1,S1a,S1b,S2,S3,S3a,S3b,S4,S4a,S4b,S5,S5a,S5b,
 			S6,S6a,S7,S7a,S7b,S8,S8a,S8b,S9,S9a,S9b,S10,S11,S11a,s12,s12a,s12b,
-			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d, cache_delay);
+			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d, S16, S16a, cache_delay);
   signal state: state_type;
   signal next_state: state_type;
   
 begin
-
-	ctrl_state <= 	x"00" when state = S0 else
-						x"10" when state = S1 else
-						x"11" when state = S1a else
-						x"12" when state = S1b else
-						x"20" when state = S2 else
-						x"30" when state = S3 else
-						x"31" when state = S3a else
-						x"32" when state = S3b else
-						x"40" when state = S4 else
-						x"41" when state = S4a else
-						x"42" when state = S4b else
-						x"50" when state = S5 else
-						x"51" when state = S5a else
-						x"52" when state = S5b else
-						x"60" when state = S6 else
-						x"61" when state = S6a else
-						x"70" when state = S7 else
-						x"71" when state = S7a else
-						x"72" when state = S7b else
-						x"80" when state = S8 else
-						x"81" when state = S8a else
-						x"82" when state = S8b else
-						x"90" when state = S9 else
-						x"91" when state = S9a else
-						x"92" when state = S9b else
-						x"A0" when state = S10 else
-						x"B0" when state = S11 else
-						x"B1" when state = S11a else
-						x"C0" when state = s12 else
-						x"C1" when state = s12a else
-						x"C2" when state = s12b else
-						x"D0" when state = s13 else
-						x"D1" when state = s13a else
-						x"D2" when state = s13b else
-						x"E0" when state = s14 else
-						x"E1" when state = s14a else
-						x"E2" when state = s14b else
-						x"F0" when state = s15 else
-						x"F1" when state = s15a else
-						x"F2" when state = s15b else
-						x"F3" when state = s15c else
-						x"F4" when state = s15d else
-						x"CD" when state = cache_delay else
-						x"FF";
 
   process(clock, rst, IR_word)
     variable OPCODE: std_logic_vector(3 downto 0);
@@ -112,6 +67,97 @@ begin
 		state <= S0;
     elsif (clock'event and clock='1') then
 	 
+		case state is
+			when S0 =>
+				ctrl_state <= x"00";
+			when S1 =>
+				ctrl_state <= x"10";
+			when S1a =>
+				ctrl_state <= x"11";
+			when S1b =>
+				ctrl_state <= x"12";
+			when S2 =>
+				ctrl_state <= x"20";
+			when S3 =>
+				ctrl_state <= x"30";
+			when S3a =>
+				ctrl_state <= x"31";
+			when S3b =>
+				ctrl_state <= x"32";
+			when S4 =>
+				ctrl_state <= x"40";
+			when S4a =>
+				ctrl_state <= x"41";
+			when S4b =>
+				ctrl_state <= x"42";
+			when S5 =>
+				ctrl_state <= x"50";
+			when S5a =>
+				ctrl_state <= x"51";
+			when S5b =>
+				ctrl_state <= x"52";
+			when S6 =>
+				ctrl_state <= x"60";
+			when S6a =>
+				ctrl_state <= x"61";
+			when S7 =>
+				ctrl_state <= x"70";
+			when S7a =>
+				ctrl_state <= x"71";
+			when S7b =>
+				ctrl_state <= x"72";
+			when S8 =>
+				ctrl_state <= x"80";
+			when S8a =>
+				ctrl_state <= x"81";
+			when S8b =>
+				ctrl_state <= x"82";
+			when S9 =>
+				ctrl_state <= x"90";
+			when S9a =>
+				ctrl_state <= x"91";
+			when S9b =>
+				ctrl_state <= x"92";
+			when S10 =>
+				ctrl_state <= x"A0";
+			when S11 =>
+				ctrl_state <= x"B0";
+			when S11a =>
+				ctrl_state <= x"B1";
+			when S12 =>
+				 ctrl_state <= x"C0";
+			when S12a =>
+				 ctrl_state <= x"C1";
+			when S12b =>
+				 ctrl_state <= x"C2";
+			when S13 =>
+				 ctrl_state <= x"D0";
+			when S13a =>
+				 ctrl_state <= x"D1";
+			when S13b =>
+				 ctrl_state <= x"D2";
+			when S14 =>
+				 ctrl_state <= x"E0";
+			when S14a =>
+				 ctrl_state <= x"E1";
+			when S14b =>
+				 ctrl_state <= x"E2";
+			when S15 =>
+				 ctrl_state <= x"F0";
+			when S15a =>
+				 ctrl_state <= x"F1";
+			when S15b =>
+				 ctrl_state <= x"F2";
+			when S15c =>
+				 ctrl_state <= x"F3";
+			when S15d =>
+				 ctrl_state <= x"F4";
+			when cache_delay =>
+				ctrl_state <= x"CD";
+			when others =>
+				ctrl_state <= x"FF";
+		end case;
+		
 		case state is 
 
 		when S0 =>
@@ -160,6 +206,7 @@ begin
 				 when div =>	state <= s13;
 				 when greater =>	state <= s14;
 				 when mov5 => state <= s15;
+				 when mov4_12 =>	state <= S16;
 				 when others => 	state <= S1;
 				 end case;
 
@@ -389,7 +436,17 @@ begin
 			RFwe_ctrl <= '0';
 			RFr1e_ctrl <= '0';
 			state <= s1;
-		
+
+		when S16 =>	
+			RFwa_ctrl <= "1110"; -- R14
+			RFwe_ctrl <= '1'; -- RF[rn] <= imm.
+			RFs_ctrl <= "10";
+			IRld_ctrl <= '0';
+			state <= S16a;
+		when S16a =>   
+			RFwe_ctrl <= '0';
+			state <= S1;
+
 		when cache_delay =>
 			state <= next_state;
 

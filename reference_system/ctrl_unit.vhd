@@ -46,9 +46,12 @@ signal IR2mux_a, IR2mux_b: std_logic_vector(15 downto 0);
 
 begin
 
-  IR2mux_b <= "000000000000" & IR_sig(11 downto 8);	
-  immdata <= "00000000" & IR_sig(7 downto 0);
-  
+  IR2mux_b <= "000000000000" & IR_sig(11 downto 8);
+
+  -- check for new instruction mov4_12
+  immdata <= "0000" & IR_sig(11 downto 0) when IR_sig(15 downto 12) = "1100" else 
+				 "00000000" & IR_sig(7 downto 0);
+
   U0: controller port map(clock_cu,rst_cu,IR_sig,RFs_cu,RFwa_cu,
 			    RFr1a_cu,RFr2a_cu,RFwe_cu,RFr1e_cu,
 			    RFr2e_cu,ALUs_cu,jpen_cu,PCinc_sig,

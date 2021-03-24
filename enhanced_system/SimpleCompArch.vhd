@@ -45,7 +45,8 @@ port( sys_clk                               :    in std_logic;
 		  D_cache_ready   								: out std_logic;
 		  D_init_count 									: out std_logic_vector(1 downto 0);
 		  ctrl_state 										: out std_logic_vector(7 downto 0);
-		  D_PC												: 	out std_logic_vector(15 downto 0)
+		  D_PC												: out std_logic_vector(15 downto 0);
+		  cache_state                             : out std_logic_vector(7 downto 0)
         -- end debug variables    
 );
 end;
@@ -73,10 +74,11 @@ architecture rtl of SimpleCompArch is
 	 signal cachew6_db       	:     std_logic_vector(15 downto 0);
 	 signal cachew7_db       	:     std_logic_vector(15 downto 0);
 	 signal init_count_db 		: std_logic_vector(1 downto 0);
+	 signal c_state 				: std_logic_vector(7 downto 0);
+	 signal ct_state 				: std_logic_vector(7 downto 0);
 
     --System local variables
-    signal oe                   : std_logic;
-	 signal ct_state : std_logic_vector(7 downto 0);    
+    signal oe                   : std_logic;    
 begin
 
 Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe, 
@@ -86,9 +88,8 @@ Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe,
 						  D_RFs,
 						  D_ALUs,
 						  D_PCld,
-						  D_jpz,           --Debug signals
-                    cache_ready, ct_state,					--cache
-						  D_PC);
+						  D_jpz,
+                    cache_ready,ct_state, D_PC);
                     
                                                                                     
 Unit2: ram32bus port map(mem_addr9, sys_clk, mdin_bus32, Mre32, Mwe32, mdout_bus32);
@@ -96,7 +97,7 @@ Unit3: obuf port map(oe, mdout_bus, sys_output);
 Unit4: cache port map(sys_rst, sys_clk, mem_addr, mdin_bus, mdin_bus32, Mwe, Mre, cache_ready, 
                       mem_addr9, Mwe32, Mre32, mdout_bus, mdout_bus32, cache_hit, cachew0_db, 
 							 cachew1_db, cachew2_db, cachew3_db, cachew4_db, cachew5_db, cachew6_db,
-							 cachew7_db, init_count_db);
+							 cachew7_db, init_count_db, c_state);
 
 -- Debug signals: output to upper level for simulation purpose only
     D_mdout_bus <= mdout_bus;    
@@ -118,7 +119,7 @@ Unit4: cache port map(sys_rst, sys_clk, mem_addr, mdin_bus, mdin_bus32, Mwe, Mre
 	 D_addr_b <= mem_addr9;
 	 D_init_count <= init_count_db;
 	 D_RAM_d_out <= mdout_bus32;
-	 --D_cache_ready <= cache_ready;
+	 cache_state <= c_state;
 	 ctrl_state <= ct_state;
 	 D_cache_ready <= cache_ready;
 -- end debug variables        
