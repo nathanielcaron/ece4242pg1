@@ -15,7 +15,7 @@
 -- Quartus Prime generated Memory Initialization File (.mif)
 
 --	0     :   3900;				-- R9 <- 0
---	1	  :	  C12C;				-- R14 <- 150
+--	1	  :	  C12C;				-- R14 <- 300
 --	2	  :	  3D01;				-- R13 <- 1
 --	3     :   B7E0;				-- R7 <- M[R14]
 --	4	  :   4ED0;				-- R14 <- R14 + R13
@@ -46,7 +46,7 @@ ADDRESS_RADIX=UNS;
 DATA_RADIX=HEX;
 
 CONTENT BEGIN
-    0    :    C12C3900; -- R9 <- 0 - R14 <- 150
+    0    :    C12C3900; -- R9 <- 0 - R14 <- 300
     1    :    B7E03D01; -- R13 <- 1 - R7 <- M[R14]
     2    :    B8E04ED0; -- R14 <- R14 + R13 - R8 <- M[R14] 
     3    :    185A4ED0; -- R14 <- R14 + R13 - M[90] <- R8
