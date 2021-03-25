@@ -63,8 +63,8 @@ architecture behav of cache is
 	--temp signal for the ram bus
 	--signal block_to_RAM : std_logic_vector(31 downto 0);
 	--set delays for writback and load (CHECK COUNT FOR DELAY ONCE DONE!!!!!)
-	signal WB_delay : integer range 0 to 12 := 12;
-	signal LD_delay : integer range 0 to 12 := 12;
+	signal WB_delay : integer range 0 to 11 := 11;
+	signal LD_delay : integer range 0 to 11 := 11;
 	signal LD_delay_startup : integer range 0 to 15 := 14; --not 15 b/c startup_a takes a cycle
 	
 	--setting up state for case structure
@@ -207,11 +207,6 @@ begin
 				when Init =>
 					-- set ready flag to one
 					rdy_signal <= '1';
-<<<<<<< HEAD
-					
-					
-=======
->>>>>>> 3756578a9f646416cde8c468b696f6f020949902
 					if we_a = '1' and re_a = '0' then
 						if hit_flag = '1' then
 							-- write to word at the correct line and word index
@@ -234,12 +229,8 @@ begin
 							data_out_a <= "ZZZZZZZZZZZZZZZZ";
 							state <= Rd_miss;
 							rdy_signal <= '0';
-<<<<<<< HEAD
-													
-=======
 						else
 							state <= Init;
->>>>>>> 3756578a9f646416cde8c468b696f6f020949902
 						end if;
 					end if;
 
@@ -277,25 +268,11 @@ begin
 					state <= Wr_miss_load_a;
 					
 				when Wr_miss_load_a =>
-					if hit_flag = '1' then
-					-- write to word at the correct line and word index
-					cache(line_int, word_int) <= data_in_a;
-					-- MUST MARK BIT AS DIRTY
-					cache_line_dirty_bits(line_int) <= '1';
-					--go wait for next address
-					state <= Init;
-					else
 					re_b <= '1';
 					state <= load_delay;
-<<<<<<< HEAD
-					end if;
-					
-			   when load_delay =>
-=======
 				
 				when load_delay =>
 					loaddelay := loaddelay-1;
->>>>>>> 3756578a9f646416cde8c468b696f6f020949902
 					if loaddelay = 0 then
 						state <= Wr_miss_load_b;
 					else
@@ -354,21 +331,9 @@ begin
 					state <= Rd_miss_load_a;
 					
 				when Rd_miss_load_a =>
-<<<<<<< HEAD
-					if hit_flag = '1' then
-					data_out_a <= cache(line_int, word_int);
-					state <= Init;
-					else
-				   re_b <= '1';
-					loaddelay := LD_delay;
-					state <= load_delay_rd;
-					end if;
-					
-=======
 					re_b <= '1';
 					state <= load_delay_rd;
 				
->>>>>>> 3756578a9f646416cde8c468b696f6f020949902
 				when load_delay_rd =>
 					loaddelay := loaddelay-1;
 					if loaddelay = 0 then
