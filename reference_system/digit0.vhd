@@ -1,23 +1,28 @@
-Library ieee;
+library ieee;
 use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;  		   
+use work.MP_lib.all;
 
-entity seven_seg_decoder is
+entity digit0 is
 		port(sys_out : in std_logic_vector(15 downto 0);
 --				hex1_input : in std_logic_vector(3 downto 0);
-			  	Hex0	:	out std_logic_vector(6 downto 0);
-				Hex1	:	out std_logic_vector(6 downto 0)
+			  	Hex0	:	out std_logic_vector(6 downto 0)
+--				Hex1	:	out std_logic_vector(6 downto 0)
 			);
 end;
 
 
-architecture arch of seven_seg_decoder is
+architecture arch of digit0 is
 
 signal hex0_input: std_logic_vector(3 downto 0);
-signal hex1_input: std_logic_vector(3 downto 0);
+--signal hex1_input: std_logic_vector(3 downto 0);
 
 begin
 		hex0_input <= sys_out(3 downto 0);
-		hex1_input <= sys_out(7 downto 4);
+		
+--		hex1_input <= sys_out(3 downto 0);
 		--Case Statement for 15 different possibilities (0 TO F)
 		process(hex0_input)
 			begin
@@ -42,26 +47,21 @@ begin
 				 end case;
 		end process;
 		
-		process(hex1_input)
-			begin
-				 case hex1_input is
-				 when "0000" => Hex1 <= "1000000"; -- '0'     
-				 when "0001" => Hex1 <= "1111001"; -- '1' 
-				 when "0010" => Hex1 <= "0100100"; -- '2' 
-				 when "0011" => Hex1 <= "0110000"; -- '3' 
-				 when "0100" => Hex1 <= "0011001"; -- '4' 
-				 when "0101" => Hex1 <= "0010010"; -- '5' 
-				 when "0110" => Hex1 <= "0000010"; -- '6' 
-				 when "0111" => Hex1 <= "1111000"; -- '7' 
-				 when "1000" => Hex1 <= "0000000"; -- '8'     
-				 when "1001" => Hex1 <= "0010000"; -- '9'
-				 when "1010" => Hex1 <= "0001000"; -- 'a'
-				 when "1011" => Hex1 <= "0000011"; -- 'b'
-				 when "1100" => Hex1 <= "1000110"; -- 'C'
-				 when "1101" => Hex1 <= "0100001"; -- 'd'
-				 when "1110" => Hex1 <= "0000110"; -- 'E'
-				 when "1111" => Hex1 <= "0001110"; -- 'F'
-				 when others => Hex1 <= "1111111";
-				 end case;
-		end process;
+--		process(hex1_input)
+--			begin
+--				 case hex1_input is
+--				 when "0000" => Hex1 <= "1000000"; -- '0'     
+--				 when "0001" => Hex1 <= "1111001"; -- '1' 
+--				 when "0010" => Hex1 <= "0100100"; -- '2' 
+--				 when "0011" => Hex1 <= "0111111"; -- '3' 
+--				 when "0100" => Hex1 <= "0011001"; -- '4' 
+--				 when "0101" => Hex1 <= "0010010"; -- '5' 
+--				 when "0110" => Hex1 <= "0000010"; -- '6' 
+--				 when "0111" => Hex1 <= "1111000"; -- '7' 
+--				 when "1000" => Hex1 <= "0000000"; -- '8'     
+--				 when "1001" => Hex1 <= "0010000"; -- '9'
+--				 when others => Hex1 <= "0001110"; -- 'F'
+--				 end case;
+--		end process;
+		
 end;
