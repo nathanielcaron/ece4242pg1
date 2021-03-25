@@ -32,14 +32,15 @@ port(	clock:		in std_logic;
 	Ms_ctrl:	out std_logic_vector(1 downto 0);
 	Mre_ctrl:	out std_logic;
 	Mwe_ctrl:	out std_logic;
-	oe_ctrl:	out std_logic
+	oe_ctrl:	out std_logic;
+	button:		in std_logic
 );
 end;
 
 architecture fsm of controller is
 
   type state_type is (S0,Sdly,S1,S1a,S1b,S2,S3,S3a,S3b,S4,S4a,S4b,S5,S5a,S5b,
-			S6,S6a,S7,S7a,S7b,S8,S8a,S8b,S9,S9a,S9b,S10,S11,S11a,s12,s12a,s12b,
+			S6,S6a,S7,S7a,S7b,S8,S8a,S8b,S9,S9a,S9b,S10,S11,S11a,S11b,s12,s12a,s12b,
 			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d, S16, S16a);
   signal state: state_type;
   signal delaystate: state_type;
@@ -231,7 +232,9 @@ begin
 			end if;			
 	  when S11a =>  oe_ctrl <= '1'; 
 			Mre_ctrl <= '0';
-			state <= S1;
+			state <= S11b;
+	  when S11b =>
+			state <= S1
 			
 	  when S12 =>	RFr1a_ctrl <= IR_word(11 downto 8);	
 			RFr1e_ctrl <= '1'; -- RF[rn] <= RF[rn] * RF[rm]

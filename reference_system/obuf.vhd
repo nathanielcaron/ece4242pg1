@@ -9,12 +9,17 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
+use ieee.numeric_std.all;
+use ieee.std_logic_unsigned.all;  
 use work.MP_lib.all;
 
 entity obuf is
 port(	O_en: 		in std_logic;
 	obuf_in: 	in std_logic_vector(15 downto 0);
 	obuf_out: 	out std_logic_vector(15 downto 0)
+--	hex0_input:	out std_logic_vector(3 downto 0);
+--	hex1_input:	out std_logic_vector(3 downto 0)
+--	clk_out: in std_logic
 );
 end;
 
@@ -24,12 +29,20 @@ begin
   process (O_en, obuf_in)
   begin
     if O_en = '1' then
-	obuf_out <= obuf_in;
-    else
-	obuf_out <= HIRES;
+		obuf_out <= obuf_in;
+--    else
+--		obuf_out <= ZERO;
     end if;
   end process;
-
+  
+--  process
+--  begin
+--	wait until temp_out = obuf_in;
+--	hex0_input <= "0011";
+--	hex1_input <= "0011";
+--  end process;
+  
+--  obuf_out <= temp_out;
 end behv;
 
 
