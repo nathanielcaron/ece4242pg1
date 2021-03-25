@@ -54,7 +54,7 @@ port (
 		D_RFs_s: out std_logic_vector(1 downto 0);
 		D_ALUs_s: out std_logic_vector(2 downto 0);
 		D_PCld_s, D_jpz_s: out std_logic;
-		button: out std_logic
+		button: in std_logic
 		-- end debug variables				
 );
 end component;
@@ -118,7 +118,8 @@ port(
 	Ms_ctrl:	out std_logic_vector(1 downto 0);
 	Mre_ctrl:	out std_logic;
 	Mwe_ctrl:	out std_logic;
-	oe_ctrl:	out std_logic
+	oe_ctrl:	out std_logic;
+	button: in std_logic
 );
 end component;
 
@@ -208,7 +209,8 @@ port(
 	ALUs_cu:	out	std_logic_vector(2 downto 0);	
 	Mre_cu:		out 	std_logic;
 	Mwe_cu:		out 	std_logic;
-	oe_cu:		out 	std_logic
+	oe_cu:		out 	std_logic;
+	button: 	in std_logic;
 );
 end component;
 
