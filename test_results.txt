@@ -8,4 +8,7 @@ mar24 | tye | 5ns cycle | 15/50 complete in 100us
 mar24 | sahil | 2ns cycle | 38/50  
 
 enhanced system dual port:
-nathaniel | Nathaniel | 2ns cycle | 46/50 completed in 100us, values looked correct
+mar24 | Nathaniel | 2ns cycle | 46/50 completed in 100us, values looked correct
+mar25 | tye | 10ns cycle | TIMING SIMULATION 20us no output
+mar25 | tye | 20ns cycle | TIMING SIMULATION 40us first output garbled (0X03), no other outputs
+mar25 | tye | 40ns cycle | TIMING SIMULATION 80us first output correct (0003), 2nd output correct, no other outputs
