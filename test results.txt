@@ -1,8 +1,0 @@
-enhanced system:
-mar24 | tye | 10ns cycle | 8/50 complete in 100us, all correct
-mar24 | tye | 5ns cycle  | 17/50 complete in 100us, 9 through 17 correct
-mar24 | sahil | 2ns cycle | 43/50
-
-reference system:
-mar24 | tye | 5ns cycle | 15/50 complete in 100us
-mar24 | sahil | 2ns cycle | 38/50  
