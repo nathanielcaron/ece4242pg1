@@ -32,7 +32,8 @@ port(	clock:		in std_logic;
 	Ms_ctrl:	out std_logic_vector(1 downto 0);
 	Mre_ctrl:	out std_logic;
 	Mwe_ctrl:	out std_logic;
-	oe_ctrl:	out std_logic
+	oe_ctrl:	out std_logic;
+	button:		in std_logic
 );
 end;
 
@@ -231,9 +232,9 @@ begin
 			end if;			
 	  when S11a =>  oe_ctrl <= '1'; 
 			Mre_ctrl <= '0';
-			state <= S11b;
-	  when S11b =>
-			state <= S1;
+			if(button = '0') then
+				state <= S1;
+			end if;
 			
 	  when S12 =>	RFr1a_ctrl <= IR_word(11 downto 8);	
 			RFr1e_ctrl <= '1'; -- RF[rn] <= RF[rn] * RF[rm]
