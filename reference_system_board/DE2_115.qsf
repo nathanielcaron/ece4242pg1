@@ -280,7 +280,6 @@ set_global_assignment -name VHDL_FILE reg_file.vhd
 set_global_assignment -name VHDL_FILE PC.vhd
 set_global_assignment -name VHDL_FILE obuf.vhd
 set_global_assignment -name VHDL_FILE MP_lib.vhd
-set_global_assignment -name VHDL_FILE memory.vhd
 set_global_assignment -name VHDL_FILE IR.vhd
 set_global_assignment -name VHDL_FILE datapath.vhd
 set_global_assignment -name VHDL_FILE datamux.vhd
