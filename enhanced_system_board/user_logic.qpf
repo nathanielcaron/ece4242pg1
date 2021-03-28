@@ -19,27 +19,13 @@
 #
 # Quartus Prime
 # Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
-# Date created = 19:03:34  November 16, 2020
-#
-# -------------------------------------------------------------------------- #
-#
-# Notes:
-#
-# 1) The default values for assignments are stored in the file:
-#		Lab8_2020_4bit_counter_assignment_defaults.qdf
-#    If this file doesn't exist, see file:
-#		assignment_defaults.qdf
-#
-# 2) Altera recommends that you do not modify this file. This
-#    file is updated automatically by the Quartus Prime software
-#    and any changes you make may be lost or overwritten.
+# Date created = 15:15:46  October 13, 2020
 #
 # -------------------------------------------------------------------------- #
 
+QUARTUS_VERSION = "20.1"
+DATE = "15:15:46  October 13, 2020"
 
-set_global_assignment -name FAMILY "Cyclone V"
-set_global_assignment -name DEVICE 5CGXFC7C7F23C8
-set_global_assignment -name TOP_LEVEL_ENTITY Lab8_2020_4bit_counter
-set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.0
-set_global_assignment -name PROJECT_CREATION_TIME_DATE "19:03:34  NOVEMBER 16, 2020"
-set_global_assignment -name LAST_QUARTUS_VERSION "20.1.0 Lite Edition"
+# Revisions
+
+PROJECT_REVISION = "user_logic"
