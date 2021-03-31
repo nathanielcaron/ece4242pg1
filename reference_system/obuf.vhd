@@ -28,7 +28,7 @@ begin
     if O_en = '1' then
 		obuf_out <= obuf_in;
     else
-		obuf_out <= ZERO;
+		obuf_out <= HIRES;
     end if;
   end process;
 end behv;

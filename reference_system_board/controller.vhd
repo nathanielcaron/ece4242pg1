@@ -41,7 +41,7 @@ architecture fsm of controller is
 
   type state_type is (S0,Sdly,S1,S1a,S1b,S2,S3,S3a,S3b,S4,S4a,S4b,S5,S5a,S5b,
 			S6,S6a,S7,S7a,S7b,S8,S8a,S8b,S9,S9a,S9b,S10,S11,S11a,S11b,s12,s12a,s12b,
-			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d, S16, S16a);
+			s13,s13a,s13b,s14,s14a,s14b,s14c,s14d,S15,S15a);
   signal state: state_type;
   signal delaystate: state_type;
   constant memdelay: integer :=16;
@@ -115,9 +115,8 @@ begin
 			    when readm => 	state <= S11;
 				 when mult =>	state <= s12;
 				 when div =>	state <= s13;
-				 when greater =>	state <= s14;
-				 when mov5 => state <= s15;
-				 when mov4_12 =>	state <= S16;
+				 when mov5 => state <= s14;
+				 when mov4_12 =>	state <= S15;
 			    when others => 	state <= S1;
 			    end case;
 					
@@ -263,57 +262,43 @@ begin
 			RFwe_ctrl <= '1';
 			state <= S13b;
 	  when S13b =>   state <= S1;
-	  
-	  when S14 =>	RFr1a_ctrl <= IR_word(11 downto 8);	
-			RFr1e_ctrl <= '1'; -- RF[rn] <= greater RF[rn],RF[rm]
-			RFr2e_ctrl <= '1'; 
-			RFr2a_ctrl <= IR_word(7 downto 4);
- 			ALUs_ctrl <= "110";
-			state <= S14a;
-	  when S14a =>   RFr1e_ctrl <= '0';
-			RFr2e_ctrl <= '0';
-			RFs_ctrl <= "00";
-			RFwa_ctrl <= IR_word(11 downto 8);
-			RFwe_ctrl <= '1';
-			state <= S14b;
-	  when S14b =>   state <= S1;
 			
-		when s15 =>
+		when s14 =>
 			RFr1a_ctrl <= IR_word(7 downto 4); -- address stored in R2
 			RFr1e_ctrl <= '1'; -- enable port for reading
 			Ms_ctrl <= "00";
 			ALUs_ctrl <= "001";
-			state <= s15a;
-		when s15a =>
+			state <= s14a;
+		when s14a =>
 			Mre_ctrl <= '1';
 			Mwe_ctrl <= '0';
-			if usedelay = false then state <= S15b;
+			if usedelay = false then state <= S14b;
 			else 
 				maccesdelay:=memdelay;
-				delaystate<= S15b;
+				delaystate<= S14b;
 				state <= Sdly;
 			end if;
-		when s15b =>
+		when s14b =>
 			RFwa_ctrl <= IR_word(11 downto 8); -- write the read value form mem[R2] to R1
 			RFs_ctrl <= "01";
 			Ms_ctrl <= "00";
-			state <= s15c;
-		when s15c =>
+			state <= s14c;
+		when s14c =>
 			RFwe_ctrl <= '1';
 			Mre_ctrl <= '0';
-			state <= s15d;
-		when s15d =>
+			state <= s14d;
+		when s14d =>
 			RFwe_ctrl <= '0';
 			RFr1e_ctrl <= '0';
 			state <= s1;
 
-		when S16 =>	
+		when S15 =>	
 			RFwa_ctrl <= "1110"; -- R14
 			RFwe_ctrl <= '1'; -- RF[rn] <= imm.
 			RFs_ctrl <= "10";
 			IRld_ctrl <= '0';
-			state <= S16a;
-		when S16a =>   
+			state <= S15a;
+		when S15a =>   
 			RFwe_ctrl <= '0';
 			state <= S1;
 
