@@ -32,7 +32,8 @@ port(	clock_cu:	in 	std_logic;
 	ALUs_cu:	out	std_logic_vector(2 downto 0);	
 	Mre_cu:		out std_logic;
 	Mwe_cu:		out std_logic;
-	oe_cu:		out std_logic
+	oe_cu:		out std_logic;
+	Inst_count: out std_logic_vector(15 downto 0)
 );
 end;
 
@@ -56,7 +57,7 @@ begin
 			    RFr1a_cu,RFr2a_cu,RFwe_cu,RFr1e_cu,
 			    RFr2e_cu,ALUs_cu,jpen_cu,PCinc_sig,
 			    PCclr_sig,IRld_sig,Ms_sig,Mre_cu,Mwe_cu,oe_cu);
-  U1: PC port map(clock_cu,PCld_cu, PCinc_sig, PCclr_sig, IR2mux_a, PC2mux);
+  U1: PC port map(clock_cu,PCld_cu, PCinc_sig, PCclr_sig, IR2mux_a, PC2mux, Inst_count);
   U2: IR port map(mdata_out, IRld_sig, IR2mux_a, IR_sig);
   U3: addrmux port map(dpdata_out,IR2mux_a,PC2mux,IR2mux_b,Ms_sig,maddr_in);
 
