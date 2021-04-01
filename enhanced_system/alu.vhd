@@ -49,22 +49,6 @@ begin
 				temp_B := conv_integer(num_B);
 				temp_C := temp_A / temp_B;
 				alu_tmp <= std_logic_vector(to_unsigned(temp_C,alu_tmp'length));
-		  when "110" =>
-				temp_A := conv_integer(num_A);
-				temp_B := conv_integer(num_B);
-				if(temp_A > temp_B) then
-					alu_tmp <= num_A;
-				else
-					alu_tmp <= num_B;
-				end if;
-			when "111" =>
-				temp_A := conv_integer(num_A);
-				temp_B := conv_integer(num_B);
-				if(temp_A <= temp_B) then
-					alu_tmp <= num_A;
-				else
-					alu_tmp <= num_B;
-				end if;
 		  when others =>
 	    end case; 					  
 	end process;

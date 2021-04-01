@@ -43,7 +43,7 @@ architecture fsm of controller is
 
   type state_type is (S0,S1,S1a,S1b,S2,S3,S3a,S3b,S4,S4a,S4b,S5,S5a,S5b,
 			S6,S6a,S7,S7a,S7b,S8,S8a,S8b,S9,S9a,S9b,S10,S11,S11a,s12,s12a,s12b,
-			s13,s13a,s13b,s14,s14a,s14b,s15,s15a,s15b,s15c,s15d, S16, S16a, cache_delay);
+			s13,s13a,s13b,s14,s14a,s14b,s14c,s14d,S15,S15a,cache_delay);
   signal state: state_type;
   signal next_state: state_type;
   
@@ -142,16 +142,14 @@ begin
 				 ctrl_state <= x"E1";
 			when S14b =>
 				 ctrl_state <= x"E2";
+			when S14c =>
+				 ctrl_state <= x"E3";
+			when S14d =>
+				 ctrl_state <= x"E4";
 			when S15 =>
 				 ctrl_state <= x"F0";
 			when S15a =>
 				 ctrl_state <= x"F1";
-			when S15b =>
-				 ctrl_state <= x"F2";
-			when S15c =>
-				 ctrl_state <= x"F3";
-			when S15d =>
-				 ctrl_state <= x"F4";
 			when cache_delay =>
 				ctrl_state <= x"CD";
 			when others =>
@@ -177,10 +175,8 @@ begin
 			oe_ctrl <= '0';
 			state <= cache_delay;
 			next_state <= S1a;
-
 		when S1a =>
 			state <= S1b;								--One memory access delay	--remove?
-
 		when S1b =>
 			if cache_ready = '1' then
 				Mre_ctrl <= '0';
@@ -204,9 +200,8 @@ begin
 				 when readm => 	state <= S11;
 				 when mult =>	state <= s12;
 				 when div =>	state <= s13;
-				 when greater =>	state <= s14;
-				 when mov5 => state <= s15;
-				 when mov4_12 =>	state <= S16;
+				 when mov5 => state <= s14;
+				 when mov4_12 =>	state <= S15;
 				 when others => 	state <= S1;
 				 end case;
 
@@ -218,14 +213,12 @@ begin
 			Mwe_ctrl <= '0';
 			state <= cache_delay;
 			next_state <= S3a;
-
 		when S3a =>
 			if cache_ready = '1' then
 				RFwe_ctrl <= '1'; 
 				Mre_ctrl <= '0'; 
 				state <= S3b;
 			end if;
-
 		when S3b =>
 			RFwe_ctrl <= '0';
 			state <= S1;
@@ -237,13 +230,11 @@ begin
 			ALUs_ctrl <= "000";	  
 			IRld_ctrl <= '0';
 			state <= S4a;								-- read value from RF
-
 		when S4a =>
 			Mre_ctrl <= '0';
 			Mwe_ctrl <= '1';							-- write into memory
 			state <= cache_delay;
 			next_state <= S4b;
-
 		when S4b =>
 			if cache_ready = '1' then
 				Ms_ctrl <= "10";				  
@@ -259,13 +250,11 @@ begin
 			RFr2a_ctrl <= IR_word(7 downto 4); 
 			RFr2e_ctrl <= '1'; 						-- set addr.& data
 			state <= S5a;
-
 		when S5a =>
 			Mre_ctrl <= '0';
 			Mwe_ctrl <= '1'; 							-- write into memory
 			state <= cache_delay;
 			next_state <= S5b;
-
 		when S5b =>
 			if cache_ready = '1' then
 				Ms_ctrl <= "10";						-- return
@@ -278,7 +267,6 @@ begin
 			RFs_ctrl <= "10";
 			IRld_ctrl <= '0';
 			state <= S6a;
-
 		when S6a =>
 			state <= S1;
 
@@ -289,7 +277,6 @@ begin
 			RFr2a_ctrl <= IR_word(7 downto 4);
 			ALUs_ctrl <= "010";
 			state <= S7a;
-
 		when S7a =>
 			RFr1e_ctrl <= '0';
 			RFr2e_ctrl <= '0';
@@ -297,7 +284,6 @@ begin
 			RFwa_ctrl <= IR_word(11 downto 8);
 			RFwe_ctrl <= '1';
 			state <= S7b;
-
 		when S7b =>
 			state <= S1;
 						
@@ -308,7 +294,6 @@ begin
 			RFr2e_ctrl <= '1';  
 			ALUs_ctrl <= "011";
 			state <= S8a;
-
 		when S8a =>
 			RFr1e_ctrl <= '0';
 			RFr2e_ctrl <= '0';
@@ -316,7 +301,6 @@ begin
 			RFwa_ctrl <= IR_word(11 downto 8);
 			RFwe_ctrl <= '1';
 			state <= S8b;
-
 		when S8b =>
 			state <= S1;
 
@@ -326,10 +310,8 @@ begin
 			RFr1e_ctrl <= '1'; 						-- jz if R[rn] = 0
 			ALUs_ctrl <= "000";
 			state <= S9a;
-
 		when S9a =>
 			state <= S9b;
-
 		when S9b =>
 			jmpen_ctrl <= '0';
 			state <= S1;
@@ -342,7 +324,6 @@ begin
 			Mwe_ctrl <= '0';
 			state <= cache_delay;
 			next_state <= S11a;
-
 		when S11a =>
 			if cache_ready = '1' then
 				oe_ctrl <= '1'; 
@@ -357,7 +338,6 @@ begin
 			RFr2a_ctrl <= IR_word(7 downto 4);
 			ALUs_ctrl <= "100";
 			state <= S12a;
-
 		when S12a =>
 			RFr1e_ctrl <= '0';
 			RFr2e_ctrl <= '0';
@@ -365,10 +345,9 @@ begin
 			RFwa_ctrl <= IR_word(11 downto 8);
 			RFwe_ctrl <= '1';
 			state <= S12b;
-
 		when S12b =>
 			state <= S1;
-		  
+			
 		when S13 =>
 			RFr1a_ctrl <= IR_word(11 downto 8);	
 			RFr1e_ctrl <= '1'; 						-- RF[rn] <= RF[rn] / RF[rm]
@@ -376,74 +355,50 @@ begin
 			RFr2a_ctrl <= IR_word(7 downto 4);
 			ALUs_ctrl <= "101";
 			state <= S13a;
-
 		when S13a =>   RFr1e_ctrl <= '0';
 			RFr2e_ctrl <= '0';
 			RFs_ctrl <= "00";
 			RFwa_ctrl <= IR_word(11 downto 8);
 			RFwe_ctrl <= '1';
 			state <= S13b;
-
 		when S13b =>
 			state <= S1;
 		  
-		when S14 =>
-			RFr1a_ctrl <= IR_word(11 downto 8);	
-			RFr1e_ctrl <= '1'; 						-- RF[rn] <= greater RF[rn],RF[rm]
-			RFr2e_ctrl <= '1'; 
-			RFr2a_ctrl <= IR_word(7 downto 4);
-			ALUs_ctrl <= "110";
-			state <= S14a;
 
-		when S14a =>
-			RFr1e_ctrl <= '0';
-			RFr2e_ctrl <= '0';
-			RFs_ctrl <= "00";
-			RFwa_ctrl <= IR_word(11 downto 8);
-			RFwe_ctrl <= '1';
-			state <= S14b;
-
-		when S14b =>
-			state <= S1;
-
-		when s15 =>
+		when s14 =>
 			RFr1a_ctrl <= IR_word(7 downto 4); 	-- address stored in R2
 			RFr1e_ctrl <= '1'; 						-- enable port for reading
 			Ms_ctrl <= "00";
 			ALUs_ctrl <= "001";
-			state <= s15a;
-
-		when s15a =>
+			state <= s14a;
+		when s14a =>
 			Mre_ctrl <= '1';
 			Mwe_ctrl <= '0';
 			state <= cache_delay;
-			next_state <= S15b;
-
-		when s15b =>
+			next_state <= S14b;
+		when s14b =>
 			if cache_ready = '1' then
 				RFwa_ctrl <= IR_word(11 downto 8); -- write the address of register to write to read value form mem[R2] to R1
 				RFs_ctrl <= "01";
 				Ms_ctrl <= "00";
-				state <= s15c;
+				state <= s14c;
 			end if;
-
-		when s15c =>
+		when s14c =>
 			RFwe_ctrl <= '1';
 			Mre_ctrl <= '0';
-			state <= s15d;
-
-		when s15d =>
+			state <= s14d;
+		when s14d =>
 			RFwe_ctrl <= '0';
 			RFr1e_ctrl <= '0';
 			state <= s1;
 
-		when S16 =>	
+		when S15 =>	
 			RFwa_ctrl <= "1110"; -- R14
 			RFwe_ctrl <= '1'; -- RF[rn] <= imm.
 			RFs_ctrl <= "10";
 			IRld_ctrl <= '0';
-			state <= S16a;
-		when S16a =>   
+			state <= S15a;
+		when S15a =>   
 			RFwe_ctrl <= '0';
 			state <= S1;
 
