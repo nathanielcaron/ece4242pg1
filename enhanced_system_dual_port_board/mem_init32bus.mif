@@ -1,0 +1,29 @@
+-- Test program 2
+-- test hit and miss with dirty bit
+-- program should output 8, then 9
+
+-- Code:
+-- x"3208",	   	    -- R2 <- #8
+-- x"1206",         -- M[6] <- R2       (test writing to block 4 word 1)
+-- x"7006",			-- output<- M[6]    (test output from block 4 word 1)
+-- x"020E",			-- R2 <- M[14]      (test reading from block 8 word 1)
+-- x"700E",			-- output<- M[14]   (test output from block 8 word 1)
+-- x"F000",         -- halt
+
+WIDTH=32;
+DEPTH=512;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    0           :       12063208;       -- M[6] <- R2, R2 <- #8
+    1           :       020E7006;       -- R2 <- M[14], output <- M[6]
+    2           :       F000700E;       -- halt, output <- M[14]
+    3           :       00000001;       -- 0, 1 (will be replaced by 8)
+    4           :       00000000;       -- 0, 0
+    5           :       00000000;       -- 0, 0
+    6           :       00000000;       -- 0, 0
+    7           :       00000009;       -- 0, 9
+    [8..511]    :       00000000;       -- 0, 0
+END;

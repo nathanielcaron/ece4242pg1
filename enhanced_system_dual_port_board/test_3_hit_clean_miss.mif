@@ -1,0 +1,28 @@
+-- Test program 3
+-- test hit and miss with clean bit
+-- program should output 1, then 2
+
+-- Code:
+-- x"0206",			-- R2 <- M[6]       (test reading from block 4 word 1)
+-- x"7006",			-- output<- M[6]    (test output from block 4 word 1)
+-- x"020E",			-- R2 <- M[14]      (test reading from block 8 word 1)
+-- x"700E",			-- output<- M[14]   (test output from block 4 word 1)
+-- x"F000",         -- halt
+
+WIDTH=32;
+DEPTH=512;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    0           :       70060206;      -- output<- M[6], R2 <- M[6]
+    1           :       700E020E;      -- output<- M[14], R2 <- M[14]
+    2           :       0000F000;       -- halt
+    3           :       00000001;       -- 0, 1
+    4           :       00000000;       -- 0, 0
+    5           :       00000000;       -- 0, 0
+    6           :       00000000;       -- 0, 0
+    7           :       00000002;       -- 0, 2
+    [8..511]    :       00000000;       -- 0, 0
+END;

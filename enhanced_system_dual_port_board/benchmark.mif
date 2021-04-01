@@ -1,0 +1,113 @@
+-- Copyright (C) 2018  Intel Corporation. All rights reserved.
+-- Your use of Intel Corporation's design tools, logic functions 
+-- and other software and tools, and its AMPP partner logic 
+-- functions, and any output files from any of the foregoing 
+-- (including device programming or simulation files), and any 
+-- associated documentation or information are expressly subject 
+-- to the terms and conditions of the Intel Program License 
+-- Subscription Agreement, the Intel Quartus Prime License Agreement,
+-- the Intel FPGA IP License Agreement, or other applicable license
+-- agreement, including, without limitation, that your use is for
+-- the sole purpose of programming logic devices manufactured by
+-- Intel and sold by Intel or its authorized distributors.  Please
+-- refer to the applicable agreement for further details.
+
+-- Quartus Prime generated Memory Initialization File (.mif)
+
+--	0     :   3900;				-- R9 <- 0
+--	1	  :	  C12C;				-- R14 <- 300
+--	2	  :	  3D01;				-- R13 <- 1
+--	3     :   B7E0;				-- R7 <- M[R14]
+--	4	  :   4ED0;				-- R14 <- R14 + R13
+--	5     :   B8E0;				-- R8 <- M[R14]
+--	6	  :   4ED0;				-- R14 <- R14 + R13
+--	7     :   185A;				-- M[90] <- R8
+--	8     :   175B;				-- M[91] <- R7
+--	9     :   015A;				-- R1 <- M[90]
+--	10    :   005B;				-- R0 <- M[91]
+--	11    :   9100;				-- R1 <- R1/R0
+--	12    :   8100;				-- R1 <- R1*R0
+--	13    :   035A;				-- R3 <- M[90]
+--	14    :   5310;				-- R3 <- R3 - R1
+--	15    :   6313;				-- R3=0 PC <- 19
+--	16    :   105A;				-- M[90] <- R0
+--	17    :   135B;				-- M[91] <- R3
+--	18    :   6909;				-- R9=0 PC <- 09
+--	19    :   705B;				-- output <- M[91]
+--	20	  :   BCE0;				-- R12 <- M[R14]
+--	21	  :	  6C17;				-- R12=0 PC <- 23
+--	22	  :   6903;				-- R9=0 Pc <- 03
+--	23    :   F000;				-- halt
+
+WIDTH=32;
+DEPTH=512;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    0    :    C12C3900; -- R9 <- 0 - R14 <- 300
+    1    :    B7E03D01; -- R13 <- 1 - R7 <- M[R14]
+    2    :    B8E04ED0; -- R14 <- R14 + R13 - R8 <- M[R14] 
+    3    :    185A4ED0; -- R14 <- R14 + R13 - M[90] <- R8
+    4    :    015A175B; -- M[91] <- R7 - R1 <- M[90]
+    5    :    9100005B;
+    6    :    035A8100;
+    7    :    63135310;
+    8    :    135B105A;
+    9    :    705B6909;
+    10   :    6C17BCE0;
+    11   :    F0006903; -- halt
+    [12..149]  :   00000000;
+    150 :   00660003;   --Pair 1
+    151 :   00760023;   --Pair 2
+    152 :   00840023;   --Pair 3
+    153 :   00720002;   --Pair 4
+    154 :   0073002E;   --Pair 5
+    155 :   007B0011;   --Pair 6
+    156 :   0091001B;   --Pair 7
+    157 :   007C002C;   --Pair 8
+    158 :   007A0024;   --Pair 9
+    159 :   0075000C;   --Pair 10
+    160 :   0088002B;   --Pair 11
+    161 :   007B0025;   --Pair 12
+    162 :   006B0008;   --Pair 13
+    163 :   00710031;   --Pair 14
+    164 :   00760006;   --Pair 15
+    165 :   006B002E;   --Pair 16
+    166 :   0081002D;   --Pair 17
+    167 :   006C001C;   --Pair 18
+    168 :   006D0027;   --Pair 19
+    169 :   00930006;   --Pair 20
+    170 :   006B0011;   --Pair 21
+    171 :   00890017;   --Pair 22
+    172 :   0077000D;   --Pair 23
+    173 :   00780016;   --Pair 24
+    174 :   007A000A;   --Pair 25
+    175 :   006A002F;   --Pair 26
+    176 :   007D0016;   --Pair 27
+    177 :   008B000E;   --Pair 28
+    178 :   0094002A;   --Pair 29
+    179 :   00810028;   --Pair 30
+    180 :   0078000A;   --Pair 31
+    181 :   00950025;   --Pair 32
+    182 :   006B0013;   --Pair 33
+    183 :   006D0011;   --Pair 34
+    184 :   007E002C;   --Pair 35
+    185 :   0064002C;   --Pair 36
+    186 :   008C002B;   --Pair 37
+    187 :   00660006;   --Pair 38
+    188 :   00760008;   --Pair 39
+    189 :   00640020;   --Pair 40
+    190 :   0071002A;   --Pair 41
+    191 :   006B0031;   --Pair 42
+    192 :   00900027;   --Pair 43
+    193 :   007A002E;   --Pair 44
+    194 :   006A001F;   --Pair 45
+    195 :   006E002C;   --Pair 46
+    196 :   007C002D;   --Pair 47
+    197 :   0067001E;   --Pair 48
+    198 :   007A0025;   --Pair 49
+    199 :   006F000E;   --Pair 50
+    [200..511]  :   00000000;
+END;
