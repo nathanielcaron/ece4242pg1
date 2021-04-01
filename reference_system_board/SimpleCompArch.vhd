@@ -51,11 +51,6 @@ architecture rtl of SimpleCompArch is
 	
 	--System local variables
 	signal oe							: std_logic;
-	signal hex0_input					: std_logic_vector(3 downto 0) := "1111";
-	signal hex1_input					: std_logic_vector(3 downto 0) := "1111";
-	signal counter						: std_logic_vector(15 downto 0) := "0000000000000000";
-	signal output_ready_signal		: std_logic;
-	signal clk_out								: std_logic;
 	
 
 begin

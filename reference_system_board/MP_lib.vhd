@@ -10,6 +10,7 @@ type ram_type is array (0 to 255) of
 
 constant ZERO : std_logic_vector(15 downto 0) := "0000000000000000";
 constant HIRES : std_logic_vector(15 downto 0) := "ZZZZZZZZZZZZZZZZ";
+constant ONES	: std_logic_vector(15 downto 0) := "1111111111111111";
 constant mov1 : std_logic_vector(3 downto 0) := "0000";
 constant mov2 : std_logic_vector(3 downto 0) := "0001";
 constant mov3 : std_logic_vector(3 downto 0) := "0010";
@@ -72,20 +73,12 @@ end component;
 
 component seven_seg_decoder is
 	port (
-	--		hex0_input : in std_logic_vector(3 downto 0);
 			sys_out : in std_logic_vector(15 downto 0);
 			Hex0	:	out std_logic_vector(6 downto 0);
 			Hex1	:	out std_logic_vector(6 downto 0)
 	);
 end component;
 	
-component digit0 is
-	port(sys_out : in std_logic_vector(15 downto 0);
---				hex1_input : in std_logic_vector(3 downto 0);
-				Hex0	:	out std_logic_vector(6 downto 0)
---				Hex1	:	out std_logic_vector(6 downto 0)
-		);
-end component;
 
 component addrmux is
 port( 	

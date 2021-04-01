@@ -106,7 +106,6 @@ set_location_assignment PIN_H17 -to sys_output[13]
 set_location_assignment PIN_F15 -to sys_output[14]
 set_location_assignment PIN_G15 -to sys_output[15]
 set_location_assignment PIN_H15 -to sys_rst
-set_global_assignment -name VHDL_FILE seven_seg_decoder.vhd
 set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
 set_global_assignment -name MIF_FILE mem_init.mif
 set_global_assignment -name SOURCE_FILE ram.cmp

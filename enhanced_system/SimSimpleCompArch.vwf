@@ -1,8 +1,8 @@
 /*<simulation_settings>
-<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/ssaini1/Desktop/New folder/ece4242pg1/enhanced_system/SimSimpleCompArch.vwf" --testbench_file="C:/Users/ssaini1/Desktop/New folder/ece4242pg1/enhanced_system/simulation/qsim/SimSimpleCompArch.vwf.vht"</ftestbench_cmd>
-<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/ssaini1/Desktop/New folder/ece4242pg1/enhanced_system/SimSimpleCompArch.vwf" --testbench_file="C:/Users/ssaini1/Desktop/New folder/ece4242pg1/enhanced_system/simulation/qsim/SimSimpleCompArch.vwf.vht"</ttestbench_cmd>
-<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/ssaini1/Desktop/New folder/ece4242pg1/enhanced_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</fnetlist_cmd>
-<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/ssaini1/Desktop/New folder/ece4242pg1/enhanced_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</tnetlist_cmd>
+<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/ssaini1/Desktop/ece4242pg1/enhanced_system/SimSimpleCompArch.vwf" --testbench_file="C:/Users/ssaini1/Desktop/ece4242pg1/enhanced_system/simulation/qsim/SimSimpleCompArch.vwf.vht"</ftestbench_cmd>
+<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/ssaini1/Desktop/ece4242pg1/enhanced_system/SimSimpleCompArch.vwf" --testbench_file="C:/Users/ssaini1/Desktop/ece4242pg1/enhanced_system/simulation/qsim/SimSimpleCompArch.vwf.vht"</ttestbench_cmd>
+<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/ssaini1/Desktop/ece4242pg1/enhanced_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</fnetlist_cmd>
+<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/ssaini1/Desktop/ece4242pg1/enhanced_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</tnetlist_cmd>
 <modelsim_script>onerror {exit -code 1}
 vlib work
 vcom -work work SimpleCompArch.vho
@@ -20,6 +20,7 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
 
 </modelsim_script>
 <modelsim_script_timing>onerror {exit -code 1}
@@ -39,6 +40,7 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
+
 
 </modelsim_script_timing>
 <hdl_lang>vhdl</hdl_lang>
@@ -70,7 +72,7 @@ HEADER
 	VERSION = 1;
 	TIME_UNIT = ns;
 	DATA_OFFSET = 0.0;
-	DATA_DURATION = 100000.0;
+	DATA_DURATION = 20000.0;
 	SIMULATION_TIME = 0.0;
 	GRID_PHASE = 0.0;
 	GRID_PERIOD = 10.0;
@@ -274,11 +276,12 @@ TRANSITION_LIST("sys_clk")
 		REPEAT = 1;
 		NODE
 		{
-			REPEAT = 9000;
-			LEVEL 0 FOR 5.556;
-			LEVEL 1 FOR 5.555;
+			REPEAT = 13003;
+			LEVEL 0 FOR 0.769;
+			LEVEL 1 FOR 0.769;
 		}
-		LEVEL 0 FOR 1.0;
+		LEVEL 0 FOR 0.769;
+		LEVEL 1 FOR 0.617;
 	}
 }
 
@@ -287,8 +290,8 @@ TRANSITION_LIST("sys_rst")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL 1 FOR 40.0;
-		LEVEL 0 FOR 99960.0;
+		LEVEL 1 FOR 160.0;
+		LEVEL 0 FOR 19840.0;
 	}
 }
 
@@ -297,7 +300,7 @@ TRANSITION_LIST("sys_output[15]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -306,7 +309,7 @@ TRANSITION_LIST("sys_output[14]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -315,7 +318,7 @@ TRANSITION_LIST("sys_output[13]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -324,7 +327,7 @@ TRANSITION_LIST("sys_output[12]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -333,7 +336,7 @@ TRANSITION_LIST("sys_output[11]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -342,7 +345,7 @@ TRANSITION_LIST("sys_output[10]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -351,7 +354,7 @@ TRANSITION_LIST("sys_output[9]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -360,7 +363,7 @@ TRANSITION_LIST("sys_output[8]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -369,7 +372,7 @@ TRANSITION_LIST("sys_output[7]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -378,7 +381,7 @@ TRANSITION_LIST("sys_output[6]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -387,7 +390,7 @@ TRANSITION_LIST("sys_output[5]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -396,7 +399,7 @@ TRANSITION_LIST("sys_output[4]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -405,7 +408,7 @@ TRANSITION_LIST("sys_output[3]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -414,7 +417,7 @@ TRANSITION_LIST("sys_output[2]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -423,7 +426,7 @@ TRANSITION_LIST("sys_output[1]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
@@ -432,7 +435,7 @@ TRANSITION_LIST("sys_output[0]")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL X FOR 100000.0;
+		LEVEL X FOR 20000.0;
 	}
 }
 
