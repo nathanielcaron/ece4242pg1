@@ -1,0 +1,26 @@
+-- Test program 7
+-- test new op code to index into memory using a value stored in a register
+-- program should output 5
+
+-- Code:
+-- x"3E0A",         -- R14 <- 10
+-- x"B7E0",         -- R7 <- M[R14]
+-- x"175B",         -- M[91] <- R7
+-- x"705B",         -- output <- M[91]
+-- x"F000",			-- halt
+
+WIDTH=32;
+DEPTH=512;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+    0           :       B7E03E0A;       -- R7 <- M[R14], R14 <- 10
+    1           :       705B175B;       -- output <- M[91], M[91] <- R7
+    2           :       0000F000;       -- 0, halt
+    3           :       00010001;       -- 1, 1
+    4           :       00010001;       -- 1, 1
+    5           :       00010005;       -- 1, 5
+    [6..511]    :       00000000;       -- 0, 0
+END;
