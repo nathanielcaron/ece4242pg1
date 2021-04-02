@@ -3,7 +3,6 @@ use ieee.std_logic_1164.all;
 
 entity seven_seg_decoder is
 		port(sys_out : in std_logic_vector(15 downto 0);
---				hex1_input : in std_logic_vector(3 downto 0);
 			  	Hex0	:	out std_logic_vector(6 downto 0);
 				Hex1	:	out std_logic_vector(6 downto 0)
 			);
@@ -32,12 +31,7 @@ begin
 				 when "0111" => Hex0 <= "1111000"; -- '7' 
 				 when "1000" => Hex0 <= "0000000"; -- '8'     
 				 when "1001" => Hex0 <= "0010000"; -- '9'
-				 when "1010" => Hex0 <= "0001000"; -- 'a'
-				 when "1011" => Hex0 <= "0000011"; -- 'b'
-				 when "1100" => Hex0 <= "1000110"; -- 'C'
-				 when "1101" => Hex0 <= "0100001"; -- 'd'
-				 when "1110" => Hex0 <= "0000110"; -- 'E'
-				 when "1111" => Hex0 <= "0001110"; -- 'F'
+				 when "1010" => Hex0 <= "0001000"; -- 'A' / 10
 				 when others => Hex0 <= "1111111";
 				 end case;
 		end process;
@@ -55,12 +49,7 @@ begin
 				 when "0111" => Hex1 <= "1111000"; -- '7' 
 				 when "1000" => Hex1 <= "0000000"; -- '8'     
 				 when "1001" => Hex1 <= "0010000"; -- '9'
-				 when "1010" => Hex1 <= "0001000"; -- 'a'
-				 when "1011" => Hex1 <= "0000011"; -- 'b'
-				 when "1100" => Hex1 <= "1000110"; -- 'C'
-				 when "1101" => Hex1 <= "0100001"; -- 'd'
-				 when "1110" => Hex1 <= "0000110"; -- 'E'
-				 when "1111" => Hex1 <= "0001110"; -- 'F'
+				 when "1010" => Hex1 <= "0001000"; -- 'A' / 10
 				 when others => Hex1 <= "1111111";
 				 end case;
 		end process;

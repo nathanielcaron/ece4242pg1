@@ -53,8 +53,7 @@ port (
 		D_RFwe_s, D_RFr1e_s, D_RFr2e_s: out std_logic;
 		D_RFs_s: out std_logic_vector(1 downto 0);
 		D_ALUs_s: out std_logic_vector(2 downto 0);
-		D_PCld_s, D_jpz_s: out std_logic;
-		button: in std_logic
+		D_PCld_s, D_jpz_s: out std_logic
 		-- end debug variables				
 );
 end component;
@@ -68,23 +67,6 @@ port (
 		ALUz:	out std_logic;
 		ALUout:	out std_logic_vector(15 downto 0)
 );
-end component;
-
-component seven_seg_decoder is
-	port (
-	--		hex0_input : in std_logic_vector(3 downto 0);
-			sys_out : in std_logic_vector(15 downto 0);
-			Hex0	:	out std_logic_vector(6 downto 0);
-			Hex1	:	out std_logic_vector(6 downto 0)
-	);
-end component;
-	
-component digit0 is
-	port(sys_out : in std_logic_vector(15 downto 0);
---				hex1_input : in std_logic_vector(3 downto 0);
-				Hex0	:	out std_logic_vector(6 downto 0)
---				Hex1	:	out std_logic_vector(6 downto 0)
-		);
 end component;
 
 component addrmux is
@@ -118,8 +100,7 @@ port(
 	Ms_ctrl:	out std_logic_vector(1 downto 0);
 	Mre_ctrl:	out std_logic;
 	Mwe_ctrl:	out std_logic;
-	oe_ctrl:	out std_logic;
-	button: in std_logic
+	oe_ctrl:	out std_logic
 );
 end component;
 
@@ -209,8 +190,12 @@ port(
 	ALUs_cu:	out	std_logic_vector(2 downto 0);	
 	Mre_cu:		out 	std_logic;
 	Mwe_cu:		out 	std_logic;
+<<<<<<< HEAD
 	oe_cu:		out 	std_logic;
 	button: 	in std_logic
+=======
+	oe_cu:		out 	std_logic
+>>>>>>> e3a72959fb1246f06bc708d11d437d846c68b1ae
 );
 end component;
 
