@@ -53,7 +53,8 @@ port (
 		D_RFwe_s, D_RFr1e_s, D_RFr2e_s: out std_logic;
 		D_RFs_s: out std_logic_vector(1 downto 0);
 		D_ALUs_s: out std_logic_vector(2 downto 0);
-		D_PCld_s, D_jpz_s: out std_logic
+		D_PCld_s, D_jpz_s: out std_logic;
+		D_Inst_count: out std_logic_vector(15 downto 0)
 		-- end debug variables				
 );
 end component;
@@ -140,7 +141,8 @@ port(
 	PCinc:	in std_logic;
 	PCclr:	in std_logic;
 	PCin:	in std_logic_vector(15 downto 0);
-	PCout:	out std_logic_vector(15 downto 0)
+	PCout:	out std_logic_vector(15 downto 0);
+	Inst_count: out std_logic_vector(15 downto 0)
 );
 end component;
 
@@ -190,7 +192,8 @@ port(
 	ALUs_cu:	out	std_logic_vector(2 downto 0);	
 	Mre_cu:		out 	std_logic;
 	Mwe_cu:		out 	std_logic;
-	oe_cu:		out 	std_logic
+	oe_cu:		out 	std_logic;
+	Inst_count: out std_logic_vector(15 downto 0)
 );
 end component;
 

@@ -46,7 +46,8 @@ port( sys_clk                               :    in std_logic;
 		  D_init_count 									: out std_logic_vector(1 downto 0);
 		  ctrl_state 										: out std_logic_vector(7 downto 0);
 		  D_PC												: out std_logic_vector(15 downto 0);
-		  cache_state                             : out std_logic_vector(7 downto 0)
+		  cache_state                             : out std_logic_vector(7 downto 0);
+		  D_Inst_count 									: out std_logic_vector(15 downto 0)
         -- end debug variables    
 );
 end;
@@ -76,6 +77,7 @@ architecture rtl of SimpleCompArch is
 	 signal init_count_db 		: std_logic_vector(1 downto 0);
 	 signal c_state 				: std_logic_vector(7 downto 0);
 	 signal ct_state 				: std_logic_vector(7 downto 0);
+	 signal Inst_count 			: std_logic_vector(15 downto 0);
 
     --System local variables
     signal oe                   : std_logic;    
@@ -89,7 +91,7 @@ Unit1: CPU port map (sys_clk,sys_rst,mdout_bus,mdin_bus,mem_addr,Mre,Mwe,oe,
 						  D_ALUs,
 						  D_PCld,
 						  D_jpz,
-                    cache_ready,ct_state, D_PC);
+                    cache_ready,ct_state, D_PC, Inst_count);
                     
                                                                                     
 Unit2: ram32bus port map(mem_addr9, sys_clk, mdin_bus32, Mre32, Mwe32, mdout_bus32);
@@ -122,6 +124,7 @@ Unit4: cache port map(sys_rst, sys_clk, mem_addr, mdin_bus, mdin_bus32, Mwe, Mre
 	 cache_state <= c_state;
 	 ctrl_state <= ct_state;
 	 D_cache_ready <= cache_ready;
+	 D_Inst_count <= Inst_count;
 -- end debug variables        
         
 end rtl;
