@@ -33,7 +33,7 @@ port(	clock_cu:	in 	std_logic;
 	Mre_cu:		out std_logic;
 	Mwe_cu:		out std_logic;
 	oe_cu:		out std_logic;
-	button:		in std_logic;
+	button:		in std_logic
 );
 end;
 

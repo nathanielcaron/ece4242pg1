@@ -1,8 +1,8 @@
 /*<simulation_settings>
-<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/ssaini1/Desktop/ece4242pg1/reference_system/Waveform.vwf" --testbench_file="C:/Users/ssaini1/Desktop/ece4242pg1/reference_system/simulation/qsim/Waveform.vwf.vht"</ftestbench_cmd>
-<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/ssaini1/Desktop/ece4242pg1/reference_system/Waveform.vwf" --testbench_file="C:/Users/ssaini1/Desktop/ece4242pg1/reference_system/simulation/qsim/Waveform.vwf.vht"</ttestbench_cmd>
-<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/ssaini1/Desktop/ece4242pg1/reference_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</fnetlist_cmd>
-<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/ssaini1/Desktop/ece4242pg1/reference_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</tnetlist_cmd>
+<ftestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/Max/Desktop/comp arch/Project/ece4242pg1/reference_system/Waveform.vwf" --testbench_file="C:/Users/Max/Desktop/comp arch/Project/ece4242pg1/reference_system/simulation/qsim/Waveform.vwf.vht"</ftestbench_cmd>
+<ttestbench_cmd>quartus_eda --gen_testbench --tool=modelsim_oem --format=vhdl --write_settings_files=off SimpleCompArch -c SimpleCompArch --vector_source="C:/Users/Max/Desktop/comp arch/Project/ece4242pg1/reference_system/Waveform.vwf" --testbench_file="C:/Users/Max/Desktop/comp arch/Project/ece4242pg1/reference_system/simulation/qsim/Waveform.vwf.vht"</ttestbench_cmd>
+<fnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=on --flatten_buses=off --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/Max/Desktop/comp arch/Project/ece4242pg1/reference_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</fnetlist_cmd>
+<tnetlist_cmd>quartus_eda --write_settings_files=off --simulation --functional=off --flatten_buses=off --timescale=1ps --tool=modelsim_oem --format=vhdl --output_directory="C:/Users/Max/Desktop/comp arch/Project/ece4242pg1/reference_system/simulation/qsim/" SimpleCompArch -c SimpleCompArch</tnetlist_cmd>
 <modelsim_script>onerror {exit -code 1}
 vlib work
 vcom -work work SimpleCompArch.vho
@@ -20,22 +20,6 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </modelsim_script>
 <modelsim_script_timing>onerror {exit -code 1}
 vlib work
@@ -54,22 +38,6 @@ proc simTimestamp {} {
 after 2500 simTimestamp
 run -all
 quit -f
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </modelsim_script_timing>
 <hdl_lang>vhdl</hdl_lang>
 </simulation_settings>*/
@@ -896,7 +864,8 @@ TRANSITION_LIST("sys_rst")
 	NODE
 	{
 		REPEAT = 1;
-		LEVEL 0 FOR 5000.0;
+		LEVEL 1 FOR 40.0;
+		LEVEL 0 FOR 4960.0;
 	}
 }
 

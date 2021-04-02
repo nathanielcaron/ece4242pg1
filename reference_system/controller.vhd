@@ -234,7 +234,7 @@ begin
 			Mre_ctrl <= '0';
 			state <= S11b;
 	  when S11b =>
-			state <= S1
+			state <= S1;
 			
 	  when S12 =>	RFr1a_ctrl <= IR_word(11 downto 8);	
 			RFr1e_ctrl <= '1'; -- RF[rn] <= RF[rn] * RF[rm]
