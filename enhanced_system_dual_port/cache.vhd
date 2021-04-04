@@ -262,11 +262,11 @@ begin
 					state <= writeback_delay;
 					
 				when writeback_delay =>
-					writebackdelay	:= writebackdelay-1;
 				   if writebackdelay = 0 then
 						state <= Write;
 						we_ram <= '0';
 					else
+						writebackdelay	:= writebackdelay-1;
 						state <= writeback_delay;
 					end if;
 				
@@ -303,11 +303,11 @@ begin
 					state <= writeback_delay_rd;
 					
 				when writeback_delay_rd =>
-					writebackdelay	:= writebackdelay-1;
 				   if writebackdelay = 0 then
 						state <= Read;
 						we_ram <= '0';
 					else
+						writebackdelay	:= writebackdelay-1;
 						state <= writeback_delay_rd;
 					end if;
 				
