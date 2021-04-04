@@ -13,38 +13,38 @@ generic (
 );
 --"A" signals are CPU facing, "B" signals are RAM facing
 port (
-		rst              :     in std_logic;
-	   clock_a          :     in std_logic;
-      addr_a           :     in std_logic_vector(9 downto 0);
-      data_in_a        :     in std_logic_vector(15 downto 0);
-		
-      ram_input        :     out std_logic_vector(31 downto 0);
-		
-      we_a             :     in std_logic;
-      re_a             :     in std_logic;
-	   cache_ready      :     out std_logic := '1';
-		
-	   addr_ram_read    :     out std_logic_vector(8 downto 0);
-		addr_ram_write   :     out std_logic_vector(8 downto 0);
-		
-      we_ram           :     out std_logic;
-		re_ram           :     out std_logic;
-		
-      data_out_a       :     out std_logic_vector(15 downto 0);
-		
-      ram_output       :     in std_logic_vector(31 downto 0);
-		
-	   hit				  : 	  out std_logic;
-		cachew0_db       :     out std_logic_vector(15 downto 0);
-		cachew1_db       :     out std_logic_vector(15 downto 0);
-		cachew2_db       :     out std_logic_vector(15 downto 0);
-		cachew3_db       :     out std_logic_vector(15 downto 0);
-		cachew4_db       :     out std_logic_vector(15 downto 0);
-		cachew5_db       :     out std_logic_vector(15 downto 0);
-		cachew6_db       :     out std_logic_vector(15 downto 0);
-		cachew7_db       :     out std_logic_vector(15 downto 0);
-		init_count_db 	  : 	  out std_logic_vector(1 downto 0);
-		c_state 			  : 	  out std_logic_vector(7 downto 0)
+		rst				:	 in std_logic;
+		clock_a			:	 in std_logic;
+		addr_a			:	 in std_logic_vector(9 downto 0);
+		data_in_a		:	 in std_logic_vector(15 downto 0);
+
+		ram_input		:	 out std_logic_vector(31 downto 0);
+
+		we_a			:	 in std_logic;
+		re_a			:	 in std_logic;
+		cache_ready		:	 out std_logic := '1';
+
+		addr_ram_read	:	 out std_logic_vector(8 downto 0);
+		addr_ram_write	:	 out std_logic_vector(8 downto 0);
+
+		we_ram			:	 out std_logic;
+		re_ram			:	 out std_logic;
+
+		data_out_a		:	 out std_logic_vector(15 downto 0);
+
+		ram_output		:	 in std_logic_vector(31 downto 0);
+
+		hit				: 	  out std_logic;
+		cachew0_db		:	 out std_logic_vector(15 downto 0);
+		cachew1_db		:	 out std_logic_vector(15 downto 0);
+		cachew2_db		:	 out std_logic_vector(15 downto 0);
+		cachew3_db		:	 out std_logic_vector(15 downto 0);
+		cachew4_db		:	 out std_logic_vector(15 downto 0);
+		cachew5_db		:	 out std_logic_vector(15 downto 0);
+		cachew6_db		:	 out std_logic_vector(15 downto 0);
+		cachew7_db		:	 out std_logic_vector(15 downto 0);
+		init_count_db 	: 	  out std_logic_vector(1 downto 0);
+		c_state 		: 	  out std_logic_vector(7 downto 0)
 );
 end;
 
@@ -52,39 +52,39 @@ architecture behav of cache is
 	-- Create array for cache data
 	subtype word_type is std_logic_vector((DATA_WIDTH-1) downto 0);
 	type cache_array is array (3 downto 0, 1 downto 0) of word_type;
-	signal cache : cache_array := ((others=> (others=> "ZZZZZZZZZZZZZZZZ")));
+	signal cache	: cache_array	:= ((others=> (others=> "ZZZZZZZZZZZZZZZZ")));
 	-- Create array for cache line tags
 	type cache_line_tag_array is array (0 to 3) of std_logic_vector (6 DOWNTO 0);
-	signal cache_line_tags : cache_line_tag_array;
+	signal cache_line_tags	: cache_line_tag_array;
 	-- Create array for cache line dirty bits (1 means it is dirty)
 	type cache_line_dirty_bit is array (0 to 3) of std_logic;
-	signal cache_line_dirty_bits : cache_line_dirty_bit := (others => '0');
+	signal cache_line_dirty_bits	: cache_line_dirty_bit	:= (others => '0');
 	-- Create signals for bit structure of address
 	signal address_word 	: std_logic;
 	signal address_line 	: std_logic_vector (1 downto 0);
-	signal address_tag 	: std_logic_vector (6 downto 0);
+	signal address_tag 		: std_logic_vector (6 downto 0);
 	signal word_int 		: integer range 0 to 1;
 	signal line_int 		: integer range 0 to 3;
 	-- Create signals to trigger loads and write backs
-	signal load_block			: std_logic := '0';
-	signal write_back_block	:	std_logic := '0';
+	signal load_block		: std_logic := '0';
+	signal write_back_block	: std_logic := '0';
 	--temp signal for the ram bus
-	--signal block_to_RAM : std_logic_vector(31 downto 0);
+	--signal block_to_RAM	: std_logic_vector(31 downto 0);
 	--set delays for writback and load (CHECK COUNT FOR DELAY ONCE DONE!!!!!)
-	signal WB_delay : integer range 0 to 15 := 13;
-	signal LD_delay : integer range 0 to 15 := 13;
-	signal LD_delay_startup : integer range 0 to 15 := 14; --not 15 b/c startup_a takes a cycle
+	signal WB_delay			: integer range 0 to 15 := 13;
+	signal LD_delay			: integer range 0 to 15 := 13;
+	signal LD_delay_startup	: integer range 0 to 15 := 14; --not 15 b/c startup_a takes a cycle
 	
 	--setting up state for case structure
-	type state_type is (Init, Wr_miss_writeback_a, writeback_delay, Wr_miss_load_b, load_delay, 
-	Rd_miss_writeback_a, writeback_delay_rd, Rd_miss_load_b, load_delay_rd,
+	type state_type is (Init, Wr_writeback, writeback_delay, Write, Wr_clean_delay, 
+	Rd_writeback, writeback_delay_rd, Read, Rd_clean_delay,
 	startup, startup_a, startup_b, startup_delay);
-	signal state: state_type;
-	signal delaystate: state_type;
-	signal current_State : state_type;
-	signal rdy_signal : std_logic;
-	signal hit_flag : std_logic;
-	signal init_count : integer range 0 to 3 := 0;
+	signal state			: state_type;
+	signal delaystate		: state_type;
+	signal current_State	: state_type;
+	signal rdy_signal		: std_logic;
+	signal hit_flag			: std_logic;
+	signal init_count		: integer range 0 to 3	:= 0;
 begin
 
 	-- Break down address into bit structure (tag = 6 bits, line = 2 bits, word = 1 bit)
@@ -136,21 +136,21 @@ begin
 					c_state <= x"03";
 				when Init =>
 					c_state <= x"10";
-				when Wr_miss_writeback_a =>
+				when Wr_writeback =>
 					c_state <= x"22";
 				when writeback_delay =>
 					c_state <= x"23";
-				when Wr_miss_load_b =>
+				when Write =>
 					c_state <= x"26";
-				when load_delay =>
+				when Wr_clean_delay =>
 					c_state <= x"27";
-				when Rd_miss_writeback_a =>
+				when Rd_writeback =>
 					c_state <= x"32";
 				when writeback_delay_rd =>
 					c_state <= x"33";
-				when Rd_miss_load_b =>
+				when Read =>
 					c_state <= x"36";
-				when load_delay_rd =>
+				when Rd_clean_delay =>
 					c_state <= x"37";
 				when others =>
 					c_state <= x"FF";
@@ -164,20 +164,20 @@ begin
 					state <= startup_a;
 
 				when startup_a =>
-					loaddelay := LD_delay_startup;
+					loaddelay	:= LD_delay_startup;
 					state <= startup_delay;
 					
 				when startup_delay =>
 					if loaddelay = 0 then
 						state <= startup_b;
-						loaddelay := LD_delay_startup;
+						loaddelay	:= LD_delay_startup;
 						cache(init_count, 0) <= ram_output(15 downto 0);
 						cache(init_count, 1) <= ram_output(31 downto 16);
 						-- update tags
 						cache_line_tags(init_count) <= std_logic_vector(to_unsigned(init_count, 10))(9 downto 3);
 					else
 						state <= startup_delay;
-						loaddelay := loaddelay-1;
+						loaddelay	:= loaddelay-1;
 					end if;
 					
 				when startup_b =>
@@ -213,12 +213,12 @@ begin
 								-- set address for writing to RAM
 								addr_ram_write(8 downto 2) <= cache_line_tags(line_int);
 								addr_ram_write(1 downto 0) <= address_line;
-								state <= Wr_miss_writeback_a;
+								state <= Wr_writeback;
 							else
 								addr_ram_read <= addr_a(9 downto 1);
 								re_ram <= '1'; --counts as first cycle of mem access
-								state <= load_delay;
-								loaddelay := LD_delay;
+								state <= Wr_clean_delay;
+								loaddelay	:= LD_delay;
 							end if;
 							rdy_signal <= '0';
 						else
@@ -239,12 +239,12 @@ begin
 								-- set address for writing to RAM
 								addr_ram_write(8 downto 2) <= cache_line_tags(line_int);
 								addr_ram_write(1 downto 0) <= address_line;
-								state <= Rd_miss_writeback_a;
+								state <= Rd_writeback;
 							else
 								addr_ram_read <= addr_a(9 downto 1);
 								re_ram <= '1'; --counts as first cycle of mem access
-								state <= load_delay_rd;
-								loaddelay := LD_delay;
+								state <= Rd_clean_delay;
+								loaddelay	:= LD_delay;
 							end if;
 							rdy_signal <= '0';
 						else
@@ -254,31 +254,31 @@ begin
 
 			--Writing states				
 				-- writeback + load
-				When Wr_miss_writeback_a => --counts as the first cycle of the mem access
+				When Wr_writeback => --counts as the first cycle of the mem access
 					-- enable reading from and writing to RAM
 					re_ram <= '1';
 					we_ram <= '1'; --must be set after address loaded
-					writebackdelay := WB_delay;
+					writebackdelay	:= WB_delay;
 					state <= writeback_delay;
 					
 				when writeback_delay =>
-					writebackdelay := writebackdelay-1;
+					writebackdelay	:= writebackdelay-1;
 				   if writebackdelay = 0 then
-						state <= Wr_miss_load_b;
+						state <= Write;
 						we_ram <= '0';
 					else
 						state <= writeback_delay;
 					end if;
 				
-				when load_delay =>
+				when Wr_clean_delay =>
 					if loaddelay = 0 then
-						state <= Wr_miss_load_b;
+						state <= Write;
 					else
-						state <= load_delay;
-						loaddelay := loaddelay-1;
+						state <= Wr_clean_delay;
+						loaddelay	:= loaddelay-1;
 					end if;
 								
-				when Wr_miss_load_b => --counts as last cycle of mem access
+				when Write => --counts as last cycle of mem access
 					-- read from RAM
 					cache_line_dirty_bits(line_int) <= '1';
 					--overwriting the other anyway
@@ -295,31 +295,31 @@ begin
 					rdy_signal <= '1';
 					
 				--reading states
-				When Rd_miss_writeback_a => --counts as start of mem access
+				When Rd_writeback => --counts as start of mem access
 					-- enable reading from and writing to RAM
 					re_ram <= '1';
 					we_ram <= '1';
-					writebackdelay := WB_delay;
+					writebackdelay	:= WB_delay;
 					state <= writeback_delay_rd;
 					
 				when writeback_delay_rd =>
-					writebackdelay := writebackdelay-1;
+					writebackdelay	:= writebackdelay-1;
 				   if writebackdelay = 0 then
-						state <= Rd_miss_load_b;
+						state <= Read;
 						we_ram <= '0';
 					else
 						state <= writeback_delay_rd;
 					end if;
 				
-				when load_delay_rd =>
+				when Rd_clean_delay =>
 					if loaddelay = 0 then
-						state <= Rd_miss_load_b;
+						state <= Read;
 					else
-						state <= load_delay_rd;
-						loaddelay := loaddelay-1;
+						state <= Rd_clean_delay;
+						loaddelay	:= loaddelay-1;
 					end if;
 					
-				when Rd_miss_load_b =>
+				when Read =>
 					-- Writing to cache
 				   cache_line_dirty_bits(line_int) <= '0';
 					cache(line_int, 0) <= ram_output(15 downto 0);
