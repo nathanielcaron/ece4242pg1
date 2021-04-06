@@ -3,7 +3,7 @@
 -- program should output 5
 
 -- Code:
--- x"700E",			-- output<- M[14]   (test output from block 4 word 1)
+-- x"700E",			-- output<- M[14]   (test output from block 7 word 1)
 -- x"F000",         -- halt
 
 WIDTH=32;
@@ -22,13 +22,4 @@ CONTENT BEGIN
     6           :       00010001;       -- 1, 1
     7           :       00010005;       -- 1, 5
     [8..511]    :       00010001;       -- 1, 1
-END;
-
-
-CONTENT BEGIN
-    0           :       F0007006;       -- halt, output<- M[6]
-    1           :       00010001;       -- 1, 1
-    2           :       00010001;       -- 1, 1
-    3           :       00010005;       -- 1, 5
-    [4..511]    :       00010001;       -- 1, 1
 END;
